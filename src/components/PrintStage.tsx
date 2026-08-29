@@ -3,7 +3,7 @@ import type { MouseEvent } from 'react'
 import type { Mode, Step } from '@/data/guides'
 import { PRINT_ASPECT } from '@/data/guides'
 
-interface Ripple {
+interface MissMark {
   key: number
   x: number
   y: number
@@ -40,7 +40,9 @@ export default function PrintStage({
   onMiss,
 }: PrintStageProps) {
   const stageRef = useRef<HTMLDivElement>(null)
-  const [ripples, setRipples] = useState<Ripple[]>([])
+  // Marcadores de erro ficam na tela até o fim do passo (o `key` no pai
+  // remonta o palco a cada passo, limpando-os).
+  const [missMarks, setMissMarks] = useState<MissMark[]>([])
   const [shaking, setShaking] = useState(false)
 
   const showTargets = mode === 'guia' || revealed
@@ -50,11 +52,9 @@ export default function PrintStage({
     if (!rect) return
     const x = ((e.clientX - rect.left) / rect.width) * 100
     const y = ((e.clientY - rect.top) / rect.height) * 100
-    const key = Date.now()
-    setRipples((r) => [...r.slice(-4), { key, x, y }])
+    setMissMarks((m) => [...m.slice(-29), { key: Date.now(), x, y }])
     setShaking(true)
     window.setTimeout(() => setShaking(false), 500)
-    window.setTimeout(() => setRipples((r) => r.filter((p) => p.key !== key)), 700)
     onMiss()
   }
 
@@ -109,13 +109,20 @@ export default function PrintStage({
         )
       })}
 
-      {ripples.map((r) => (
+      {missMarks.map((m) => (
         <span
-          key={r.key}
+          key={m.key}
           aria-hidden="true"
-          className="anim-miss pointer-events-none absolute size-14 rounded-full border-4 border-coral"
-          style={{ left: `${r.x}%`, top: `${r.y}%` }}
-        />
+          className="pointer-events-none absolute size-7 -translate-x-1/2 -translate-y-1/2"
+          style={{ left: `${m.x}%`, top: `${m.y}%` }}
+        >
+          {/* onda de expansão one-shot */}
+          <span className="anim-miss absolute inset-0 rounded-full border-2 border-coral" />
+          {/* marcador permanente, centrado no ponto do toque */}
+          <span className="anim-hit flex size-full items-center justify-center rounded-full border-2 border-coral bg-coral/20 text-xs font-bold text-coral shadow-[0_2px_8px_rgba(0,0,0,0.35)] backdrop-blur-[1px]">
+            ✕
+          </span>
+        </span>
       ))}
     </div>
   )
