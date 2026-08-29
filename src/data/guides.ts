@@ -161,3 +161,14 @@ export const guides: Guide[] = [
 export function getGuide(id: string | undefined): Guide | undefined {
   return guides.find((g) => g.id === id)
 }
+
+/** Resumo do treino, exibido como snackbar na lista inicial. */
+export interface TrainingResult {
+  guideTitle: string
+  mode: Mode
+  seconds: number
+  steps: number
+  misses: number
+  accuracy: number
+  reveals: number
+}

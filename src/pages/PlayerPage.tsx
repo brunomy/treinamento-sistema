@@ -2,13 +2,8 @@ import { useEffect, useMemo, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import PrintStage from '@/components/PrintStage'
 import { getGuide } from '@/data/guides'
-import type { Mode } from '@/data/guides'
-
-function formatTime(totalSeconds: number): string {
-  const m = Math.floor(totalSeconds / 60)
-  const s = totalSeconds % 60
-  return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`
-}
+import type { Mode, TrainingResult } from '@/data/guides'
+import { formatTime } from '@/lib/format'
 
 export default function PlayerPage() {
   const { guideId, mode: modeParam } = useParams()
@@ -22,6 +17,7 @@ export default function PlayerPage() {
   const [success, setSuccess] = useState(false)
   const [hits, setHits] = useState(0)
   const [misses, setMisses] = useState(0)
+  const [stepMisses, setStepMisses] = useState(0)
   const [reveals, setReveals] = useState(0)
   const [seconds, setSeconds] = useState(0)
   const [finished, setFinished] = useState(false)
@@ -41,6 +37,22 @@ export default function PlayerPage() {
     return total === 0 ? 100 : Math.round((hits / total) * 100)
   }, [hits, misses])
 
+  // Ao concluir o último passo, volta direto à lista inicial levando o
+  // resumo do treino — a Home o exibe como snackbar.
+  useEffect(() => {
+    if (!finished || !guide) return
+    const result: TrainingResult = {
+      guideTitle: guide.title,
+      mode,
+      seconds,
+      steps: totalSteps,
+      misses,
+      accuracy,
+      reveals,
+    }
+    navigate('/', { state: { result } })
+  }, [finished, guide, mode, seconds, totalSteps, misses, accuracy, reveals, navigate])
+
   if (!guide || !step) {
     return (
       <section className="mx-auto max-w-lg py-20 text-center">
@@ -58,6 +70,7 @@ export default function PlayerPage() {
       setSuccess(false)
       setHitIds(new Set())
       setRevealed(false)
+      setStepMisses(0)
       if (isLastStep) {
         setFinished(true)
       } else {
@@ -78,6 +91,10 @@ export default function PlayerPage() {
   function handleMiss() {
     if (success || mode === 'guia') return
     setMisses((m) => m + 1)
+    // Após 3 erros no mesmo passo, revela automaticamente onde clicar.
+    const nextStepMisses = stepMisses + 1
+    setStepMisses(nextStepMisses)
+    if (nextStepMisses >= 3) setRevealed(true)
   }
 
   function handleReveal() {
@@ -86,77 +103,6 @@ export default function PlayerPage() {
     setMisses((m) => m + 1)
   }
 
-  // ---------------------------------------------------------------- resultado
-  if (finished) {
-    const otherMode: Mode = mode === 'guia' ? 'pratica' : 'guia'
-    return (
-      <section className="anim-rise mx-auto max-w-xl space-y-8 py-10 text-center">
-        <div className="space-y-2">
-          <p className="label-mono">treino concluído</p>
-          <h1 className="text-3xl font-bold text-balance">{guide.title}</h1>
-        </div>
-
-        <div className="glass grid grid-cols-3 divide-x divide-edge py-6">
-          <div>
-            <p className="font-mono text-3xl font-bold text-teal tabular-nums">
-              {mode === 'pratica' ? `${accuracy}%` : '✓'}
-            </p>
-            <p className="label-mono mt-1">{mode === 'pratica' ? 'precisão' : 'completo'}</p>
-          </div>
-          <div>
-            <p className="font-mono text-3xl font-bold tabular-nums">{formatTime(seconds)}</p>
-            <p className="label-mono mt-1">tempo</p>
-          </div>
-          <div>
-            <p className="font-mono text-3xl font-bold text-coral tabular-nums">
-              {mode === 'pratica' ? misses : totalSteps}
-            </p>
-            <p className="label-mono mt-1">{mode === 'pratica' ? 'erros' : 'passos'}</p>
-          </div>
-        </div>
-
-        {mode === 'pratica' && reveals > 0 && (
-          <p className="text-sm text-fog">
-            Você usou “Revelar” {reveals}× — tente de novo sem revelar para fixar o caminho.
-          </p>
-        )}
-
-        <div className="flex flex-col gap-3 sm:flex-row sm:justify-center">
-          <button
-            type="button"
-            onClick={() => {
-              setStepIndex(0)
-              setHitIds(new Set())
-              setHits(0)
-              setMisses(0)
-              setReveals(0)
-              setSeconds(0)
-              setRevealed(false)
-              setFinished(false)
-            }}
-            className="rounded-lg bg-teal px-6 py-3 font-bold text-teal-deep transition hover:brightness-110"
-          >
-            Repetir
-          </button>
-          <button
-            type="button"
-            onClick={() => navigate(`/treino/${guide.id}/${otherMode}`)}
-            className="rounded-lg border border-edge px-6 py-3 font-semibold transition hover:border-teal/60 hover:text-teal"
-          >
-            {otherMode === 'pratica' ? 'Tentar no modo Prática' : 'Rever no modo Guia'}
-          </button>
-          <Link
-            to="/"
-            className="rounded-lg border border-edge px-6 py-3 font-semibold text-fog transition hover:text-snow"
-          >
-            Outros treinos
-          </Link>
-        </div>
-      </section>
-    )
-  }
-
-  // ---------------------------------------------------------------- player
   return (
     <div className="space-y-4">
       <header className="flex flex-wrap items-center gap-x-6 gap-y-2">
@@ -221,6 +167,9 @@ export default function PlayerPage() {
               <span className="ml-2 text-teal">
                 ({hitIds.size}/{step.targets.length} cliques)
               </span>
+            )}
+            {mode === 'pratica' && revealed && (
+              <span className="ml-2 text-coral">· alvo revelado</span>
             )}
           </p>
         </div>

@@ -1,9 +1,25 @@
-import { Link } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { Link, useLocation } from 'react-router-dom'
+import ResultSnackbar from '@/components/ResultSnackbar'
 import { guides } from '@/data/guides'
+import type { TrainingResult } from '@/data/guides'
 
 export default function HomePage() {
+  const location = useLocation()
+  // Resultado vindo do player via location.state: capturado na montagem
+  // (o snackbar dura uma exibição) e removido do histórico para não
+  // reaparecer em refresh/voltar.
+  const [result] = useState<TrainingResult | null>(
+    () => (location.state as { result?: TrainingResult } | null)?.result ?? null,
+  )
+
+  useEffect(() => {
+    if (result) window.history.replaceState({}, '')
+  }, [result])
+
   return (
     <div className="space-y-10">
+      {result && <ResultSnackbar result={result} />}
       <section className="anim-rise space-y-3">
         <p className="label-mono">Treinamento · sistema de atendimento</p>
         <h1 className="text-4xl font-bold tracking-tight text-balance">
