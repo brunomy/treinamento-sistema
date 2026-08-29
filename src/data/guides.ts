@@ -172,3 +172,10 @@ export interface TrainingResult {
   accuracy: number
   reveals: number
 }
+
+/**
+ * Proporcao (largura/altura) dos prints — usada para dimensionar o palco
+ * de forma que o passo caiba inteiro na tela do tablet, sem rolagem.
+ * Ajuste se os prints reais tiverem outra proporcao.
+ */
+export const PRINT_ASPECT = 1440 / 820

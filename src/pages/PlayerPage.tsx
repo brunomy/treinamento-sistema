@@ -3,6 +3,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom'
 import PrintStage from '@/components/PrintStage'
 import { getGuide } from '@/data/guides'
 import type { Mode, TrainingResult } from '@/data/guides'
+import { PRINT_ASPECT } from '@/data/guides'
 import { formatTime } from '@/lib/format'
 
 export default function PlayerPage() {
@@ -106,7 +107,10 @@ export default function PlayerPage() {
   return (
     <div className="space-y-4">
       <header className="flex flex-wrap items-center gap-x-6 gap-y-2">
-        <Link to="/" className="label-mono transition hover:text-teal">
+        <Link
+          to="/"
+          className="label-mono -mx-2 rounded-lg px-2 py-2 transition hover:text-teal active:bg-panel"
+        >
           ← treinos
         </Link>
         <h1 className="text-lg font-semibold">{guide.title}</h1>
@@ -144,21 +148,28 @@ export default function PlayerPage() {
         </div>
       </header>
 
-      <PrintStage
-        key={`${stepIndex}-${mode}`}
-        step={step}
-        mode={mode}
-        hitIds={hitIds}
-        revealed={revealed}
-        success={success}
-        onTargetHit={handleTargetHit}
-        onMiss={handleMiss}
-      />
+      {/* Largura limitada para o print caber inteiro na tela do tablet
+          (paisagem) sem rolagem: altura disponível × proporção do print. */}
+      <div
+        className="mx-auto w-full"
+        style={{ maxWidth: `min(100%, calc((100dvh - 15rem) * ${PRINT_ASPECT}))` }}
+      >
+        <PrintStage
+          key={`${stepIndex}-${mode}`}
+          step={step}
+          mode={mode}
+          hitIds={hitIds}
+          revealed={revealed}
+          success={success}
+          onTargetHit={handleTargetHit}
+          onMiss={handleMiss}
+        />
+      </div>
 
       <footer className="flex flex-wrap items-stretch gap-3">
-        <div className="glass flex min-h-12 flex-1 items-center gap-3 px-5 py-3">
+        <div className="glass flex min-h-14 flex-1 items-center gap-3 px-5 py-3">
           <span aria-hidden="true">💡</span>
-          <p className="text-sm">
+          <p className="text-base">
             <span className="label-mono mr-3">
               passo {stepIndex + 1}/{totalSteps}
             </span>
@@ -177,7 +188,7 @@ export default function PlayerPage() {
           <button
             type="button"
             onClick={handleReveal}
-            className="rounded-xl border border-edge px-5 text-sm font-semibold text-fog transition hover:border-coral/60 hover:text-coral"
+            className="min-h-14 rounded-xl border border-edge px-7 text-base font-semibold text-fog transition hover:border-coral/60 hover:text-coral active:scale-[0.97] active:border-coral/60 active:text-coral"
             title="Mostra onde clicar (conta como erro)"
           >
             Revelar

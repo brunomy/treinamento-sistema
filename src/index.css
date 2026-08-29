@@ -22,6 +22,9 @@
 @layer base {
   html {
     color-scheme: dark;
+    /* Tablet: evita zoom por duplo toque e delay de 300ms no clique */
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
   }
 
   body {

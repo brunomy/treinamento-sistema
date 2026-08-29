@@ -48,13 +48,13 @@ export default function HomePage() {
             <div className="flex gap-3">
               <Link
                 to={`/treino/${guide.id}/guia`}
-                className="flex-1 rounded-lg bg-teal px-4 py-2.5 text-center text-sm font-bold text-teal-deep transition hover:brightness-110 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal"
+                className="min-h-13 flex-1 content-center rounded-xl bg-teal px-4 text-center text-base font-bold text-teal-deep transition hover:brightness-110 active:scale-[0.97] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal"
               >
                 Guia
               </Link>
               <Link
                 to={`/treino/${guide.id}/pratica`}
-                className="flex-1 rounded-lg border border-edge px-4 py-2.5 text-center text-sm font-semibold text-snow transition hover:border-teal/60 hover:text-teal focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal"
+                className="min-h-13 flex-1 content-center rounded-xl border border-edge px-4 text-center text-base font-semibold text-snow transition hover:border-teal/60 hover:text-teal active:scale-[0.97] active:border-teal/60 active:text-teal focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal"
               >
                 Prática
               </Link>

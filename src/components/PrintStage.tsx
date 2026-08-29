@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react'
 import type { MouseEvent } from 'react'
 import type { Mode, Step } from '@/data/guides'
+import { PRINT_ASPECT } from '@/data/guides'
 
 interface Ripple {
   key: number
@@ -13,7 +14,7 @@ interface PrintStageProps {
   mode: Mode
   /** ids dos alvos já acertados neste passo */
   hitIds: ReadonlySet<string>
-  /** em Prática, mostra os alvos após "Revelar" */
+  /** em Prática, mostra os alvos após "Revelar" (ou 3 erros no passo) */
   revealed: boolean
   /** passo recém-concluído → brilho de sucesso */
   success: boolean
@@ -25,6 +26,9 @@ interface PrintStageProps {
  * O palco: print do sistema + camada de hotspots em coordenadas percentuais.
  * Guia: alvos visíveis pulsando. Prática: alvos invisíveis; erro gera ripple
  * vermelho + tremida, acerto gera anel pop turquesa.
+ *
+ * Pensado para toque (tablet): cada alvo tem uma área de acerto expandida
+ * (~12px além do anel visível) via ::before, sem alterar o visual.
  */
 export default function PrintStage({
   step,
@@ -58,11 +62,17 @@ export default function PrintStage({
     <div
       ref={stageRef}
       onClick={handleMiss}
-      className={`relative overflow-hidden rounded-xl border border-edge bg-white select-none ${
+      className={`relative w-full overflow-hidden rounded-xl border border-edge bg-white select-none ${
         shaking ? 'anim-shake' : ''
       } ${success ? 'anim-success' : ''}`}
+      style={{ aspectRatio: `${PRINT_ASPECT}` }}
     >
-      <img src={step.image} alt={step.title} className="block w-full" draggable={false} />
+      <img
+        src={step.image}
+        alt={step.title}
+        className="absolute inset-0 h-full w-full"
+        draggable={false}
+      />
 
       {step.targets.map((t) => {
         const hit = hitIds.has(t.id)
@@ -76,7 +86,7 @@ export default function PrintStage({
               e.stopPropagation()
               if (!hit) onTargetHit(t.id)
             }}
-            className={`absolute rounded-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal ${
+            className={`absolute rounded-lg before:absolute before:-inset-3 before:content-[''] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal ${
               hit
                 ? 'anim-hit border-[3px] border-teal bg-teal/15 shadow-[0_0_18px_rgba(94,234,212,0.6)]'
                 : showTargets
