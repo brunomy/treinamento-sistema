@@ -1,11 +1,11 @@
 /**
- * Dados mocados dos guias de treinamento.
+ * Dados mocados dos guias de treinamento, organizados por aplicação (aba).
  *
  * Coordenadas dos alvos (x, y, w, h) em PORCENTAGEM da imagem — assim os
  * hotspots escalam junto com o print em qualquer tamanho de tela.
- * Ao trocar os SVGs de public/prints/ por prints reais do Velco, basta
- * ajustar estes números (dica: rode `npm run gen:prints` para ver as
- * coordenadas de referência dos mocks).
+ * Ao trocar os SVGs de public/prints/ por prints reais, basta ajustar
+ * estes números (rode `npm run gen:prints` / `npm run gen:prints:condominio`
+ * para ver as coordenadas de referência dos mocks).
  */
 
 export interface Target {
@@ -28,16 +28,45 @@ export interface Step {
 
 export interface Guide {
   id: string
+  /** aplicação (aba) à qual o guia pertence */
+  appId: string
   title: string
   description: string
   steps: Step[]
 }
 
+/** Uma aplicação treinável — vira uma aba na tela inicial. */
+export interface TrainingApp {
+  id: string
+  name: string
+  module: string
+  guides: Guide[]
+}
+
 export type Mode = 'guia' | 'pratica'
 
-export const guides: Guide[] = [
+/** Resumo do treino, exibido como snackbar na lista inicial. */
+export interface TrainingResult {
+  guideTitle: string
+  mode: Mode
+  seconds: number
+  steps: number
+  misses: number
+  accuracy: number
+  reveals: number
+}
+
+/**
+ * Proporcao (largura/altura) dos prints — usada para dimensionar o palco
+ * de forma que o passo caiba inteiro na tela do tablet, sem rolagem.
+ * Ajuste se os prints reais tiverem outra proporcao.
+ */
+export const PRINT_ASPECT = 1440 / 820
+
+const velcoGuides: Guide[] = [
   {
     id: 'acessar-financeiro-compras',
+    appId: 'velco',
     title: 'Acessar o Financeiro Compras',
     description: 'Navegue pelo menu até o relatório Financeiro Compras.',
     steps: [
@@ -65,6 +94,7 @@ export const guides: Guide[] = [
   },
   {
     id: 'filtrar-por-ano',
+    appId: 'velco',
     title: 'Filtrar gastos por ano',
     description: 'Use o painel de filtro para mudar o ano do relatório.',
     steps: [
@@ -96,6 +126,7 @@ export const guides: Guide[] = [
   },
   {
     id: 'exportar-relatorio',
+    appId: 'velco',
     title: 'Exportar o relatório',
     description: 'Gere um arquivo Excel com os dados do relatório.',
     steps: [
@@ -121,6 +152,7 @@ export const guides: Guide[] = [
   },
   {
     id: 'comparar-meses',
+    appId: 'velco',
     title: 'Comparar meses de gastos',
     description: 'Selecione dois meses e compare os gastos entre eles.',
     steps: [
@@ -158,24 +190,76 @@ export const guides: Guide[] = [
   },
 ]
 
+const condominioGuides: Guide[] = [
+  {
+    id: 'registrar-entrega',
+    appId: 'condominio',
+    title: 'Registrar entrega de encomenda',
+    description: 'Encontre a encomenda pendente e marque como entregue ao morador.',
+    steps: [
+      {
+        image: '/prints/condominio/c01-dashboard.svg',
+        title: 'Abrir Encomendas',
+        hint: 'No menu lateral, clique em “Encomendas”.',
+        targets: [{ id: 'menu-encomendas', x: 0.8, y: 30.2, w: 15.8, h: 4.9, label: 'Encomendas' }],
+      },
+      {
+        image: '/prints/condominio/c02-lista-encomendas.svg',
+        title: 'Entregar a encomenda',
+        hint: 'Na primeira linha (Beatriz Lizarda), clique em “Entregar”.',
+        targets: [{ id: 'btn-entregar', x: 90.3, y: 26.8, w: 6.9, h: 4.4, label: 'Entregar' }],
+      },
+      {
+        image: '/prints/condominio/c03-confirmar-entrega.svg',
+        title: 'Confirmar',
+        hint: 'Confira o destinatário e clique em “Confirmar entrega”.',
+        targets: [
+          { id: 'btn-confirmar', x: 51.4, y: 57.3, w: 12.5, h: 6.3, label: 'Confirmar entrega' },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'cadastrar-encomenda',
+    appId: 'condominio',
+    title: 'Cadastrar nova encomenda',
+    description: 'Registre a chegada de um pacote na portaria.',
+    steps: [
+      {
+        image: '/prints/condominio/c02-lista-encomendas.svg',
+        title: 'Abrir o cadastro',
+        hint: 'Clique em “+ Nova encomenda”, no canto superior direito.',
+        targets: [{ id: 'btn-nova', x: 86.9, y: 12.7, w: 11.9, h: 4.9, label: 'Nova encomenda' }],
+      },
+      {
+        image: '/prints/condominio/c04-nova-encomenda.svg',
+        title: 'Identificar o morador',
+        hint: 'Comece pelo campo “Destinatário” para buscar o morador.',
+        targets: [
+          { id: 'campo-destinatario', x: 34.7, y: 35.4, w: 30.6, h: 5.4, label: 'Destinatário' },
+        ],
+      },
+      {
+        image: '/prints/condominio/c04-nova-encomenda.svg',
+        title: 'Salvar',
+        hint: 'Com os dados preenchidos, clique em “Salvar”.',
+        targets: [{ id: 'btn-salvar', x: 51.4, y: 65.9, w: 13.9, h: 6.3, label: 'Salvar' }],
+      },
+    ],
+  },
+]
+
+export const apps: TrainingApp[] = [
+  { id: 'velco', name: 'Velco', module: 'Financeiro Compras', guides: velcoGuides },
+  { id: 'condominio', name: 'Condomínio App', module: 'Encomendas', guides: condominioGuides },
+]
+
+const allGuides: Guide[] = apps.flatMap((a) => a.guides)
+
 export function getGuide(id: string | undefined): Guide | undefined {
-  return guides.find((g) => g.id === id)
+  return allGuides.find((g) => g.id === id)
 }
 
-/** Resumo do treino, exibido como snackbar na lista inicial. */
-export interface TrainingResult {
-  guideTitle: string
-  mode: Mode
-  seconds: number
-  steps: number
-  misses: number
-  accuracy: number
-  reveals: number
+export function getApp(id: string | undefined): TrainingApp | undefined {
+  return apps.find((a) => a.id === id)
 }
-
-/**
- * Proporcao (largura/altura) dos prints — usada para dimensionar o palco
- * de forma que o passo caiba inteiro na tela do tablet, sem rolagem.
- * Ajuste se os prints reais tiverem outra proporcao.
- */
-export const PRINT_ASPECT = 1440 / 820

@@ -19,7 +19,7 @@ export default function RootLayout() {
               Central de <span className="text-teal">treinos</span>
             </span>
           </Link>
-          <span className="label-mono">Módulo · Financeiro Compras</span>
+          <span className="label-mono">Guias por aplicação</span>
         </nav>
       </header>
 

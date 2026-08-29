@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import PrintStage from '@/components/PrintStage'
-import { getGuide } from '@/data/guides'
+import { apps, getGuide } from '@/data/guides'
 import type { Mode, TrainingResult } from '@/data/guides'
 import { PRINT_ASPECT } from '@/data/guides'
 import { formatTime } from '@/lib/format'
@@ -10,6 +10,7 @@ export default function PlayerPage() {
   const { guideId, mode: modeParam } = useParams()
   const navigate = useNavigate()
   const guide = getGuide(guideId)
+  const homePath = guide && guide.appId !== apps[0].id ? `/?app=${guide.appId}` : '/'
   const mode: Mode = modeParam === 'pratica' ? 'pratica' : 'guia'
 
   const [stepIndex, setStepIndex] = useState(0)
@@ -51,8 +52,8 @@ export default function PlayerPage() {
       accuracy,
       reveals,
     }
-    navigate('/', { state: { result } })
-  }, [finished, guide, mode, seconds, totalSteps, misses, accuracy, reveals, navigate])
+    navigate(homePath, { state: { result } })
+  }, [finished, guide, mode, seconds, totalSteps, misses, accuracy, reveals, navigate, homePath])
 
   if (!guide || !step) {
     return (
@@ -108,7 +109,7 @@ export default function PlayerPage() {
     <div className="space-y-4">
       <header className="flex flex-wrap items-center gap-x-6 gap-y-2">
         <Link
-          to="/"
+          to={homePath}
           className="label-mono -mx-2 rounded-lg px-2 py-2 transition hover:text-teal active:bg-panel"
         >
           ← treinos
