@@ -10,7 +10,8 @@
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "gen:prints": "node scripts/gen-prints.mjs"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.3.3",

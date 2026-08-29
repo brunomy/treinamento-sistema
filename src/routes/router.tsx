@@ -1,9 +1,8 @@
 import { createBrowserRouter } from 'react-router-dom'
 import RootLayout from '@/components/RootLayout'
-import AboutPage from '@/pages/AboutPage'
-import CounterPage from '@/pages/CounterPage'
 import HomePage from '@/pages/HomePage'
 import NotFoundPage from '@/pages/NotFoundPage'
+import PlayerPage from '@/pages/PlayerPage'
 
 export const router = createBrowserRouter([
   {
@@ -12,8 +11,7 @@ export const router = createBrowserRouter([
     errorElement: <NotFoundPage />,
     children: [
       { index: true, element: <HomePage /> },
-      { path: 'contador', element: <CounterPage /> },
-      { path: 'sobre', element: <AboutPage /> },
+      { path: 'treino/:guideId/:mode', element: <PlayerPage /> },
       { path: '*', element: <NotFoundPage /> },
     ],
   },

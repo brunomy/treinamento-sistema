@@ -1,19 +1,159 @@
 @import 'tailwindcss';
 
+/*
+ * Direção visual "Console Focus": tema escuro comprometido (único),
+ * painéis de vidro e um só acento turquesa. O print do sistema é o
+ * elemento mais claro da tela — todo o resto recua.
+ */
 @theme {
-  --color-brand-50: oklch(0.97 0.02 265);
-  --color-brand-100: oklch(0.93 0.05 265);
-  --color-brand-500: oklch(0.62 0.19 265);
-  --color-brand-600: oklch(0.55 0.19 265);
-  --color-brand-700: oklch(0.47 0.17 265);
+  --color-ink: #101322;
+  --color-ink-2: #151931;
+  --color-panel: rgba(255, 255, 255, 0.055);
+  --color-edge: rgba(255, 255, 255, 0.12);
+  --color-fog: #8b93b8;
+  --color-snow: #e6e9f5;
+  --color-teal: #5eead4;
+  --color-teal-deep: #0c2b26;
+  --color-coral: #fb7185;
+
+  --font-mono: ui-monospace, 'Cascadia Code', Consolas, monospace;
 }
 
 @layer base {
   html {
-    color-scheme: light dark;
+    color-scheme: dark;
   }
 
   body {
-    @apply bg-white text-slate-800 antialiased dark:bg-slate-950 dark:text-slate-200;
+    @apply bg-ink text-snow antialiased;
+    background-image:
+      radial-gradient(1100px 500px at 85% -10%, rgba(94, 234, 212, 0.07), transparent 60%),
+      radial-gradient(900px 500px at -10% 110%, rgba(99, 102, 241, 0.09), transparent 60%);
+    background-attachment: fixed;
+  }
+}
+
+@utility glass {
+  background-color: var(--color-panel);
+  border: 1px solid var(--color-edge);
+  border-radius: 0.75rem;
+}
+
+@utility label-mono {
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  font-size: 0.72rem;
+  color: var(--color-fog);
+}
+
+/* ------- animações do player ------- */
+@keyframes hotspot-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(94, 234, 212, 0.55);
+  }
+  80% {
+    box-shadow: 0 0 0 14px rgba(94, 234, 212, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(94, 234, 212, 0);
+  }
+}
+
+@keyframes hit-pop {
+  0% {
+    transform: scale(0.4);
+    opacity: 0;
+  }
+  55% {
+    transform: scale(1.18);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes miss-ripple {
+  0% {
+    transform: translate(-50%, -50%) scale(0.2);
+    opacity: 0.85;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(2.4);
+    opacity: 0;
+  }
+}
+
+@keyframes stage-shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-7px);
+  }
+  40% {
+    transform: translateX(6px);
+  }
+  60% {
+    transform: translateX(-4px);
+  }
+  80% {
+    transform: translateX(3px);
+  }
+}
+
+@keyframes success-glow {
+  0% {
+    box-shadow: 0 0 0 0 rgba(94, 234, 212, 0);
+  }
+  40% {
+    box-shadow: 0 0 44px 4px rgba(94, 234, 212, 0.45);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(94, 234, 212, 0);
+  }
+}
+
+@keyframes rise-in {
+  from {
+    transform: translateY(10px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.anim-hotspot {
+  animation: hotspot-pulse 1.8s ease-out infinite;
+}
+.anim-hit {
+  animation: hit-pop 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+.anim-miss {
+  animation: miss-ripple 0.6s ease-out both;
+}
+.anim-shake {
+  animation: stage-shake 0.45s ease-in-out;
+}
+.anim-success {
+  animation: success-glow 0.9s ease-out;
+}
+.anim-rise {
+  animation: rise-in 0.35s ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .anim-hotspot,
+  .anim-hit,
+  .anim-miss,
+  .anim-shake,
+  .anim-success,
+  .anim-rise {
+    animation: none;
   }
 }
