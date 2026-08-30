@@ -17,6 +17,18 @@ const ATALHOS_KOMMO = [
   },
 ] as const
 
+// Num atalho de tela inicial (janela standalone), um link same-origin com target="_blank"
+// costuma ser aberto DENTRO da própria janela do app: a página /ir redireciona essa mesma
+// janela para o Kommo e o usuário perde a aplicação ao fechá-la. Por isso abrimos a nova
+// janela explicitamente; só cancelamos a navegação padrão se o window.open funcionar.
+function abrirEmNovaJanela(event: React.MouseEvent<HTMLAnchorElement>) {
+  const janela = window.open(event.currentTarget.href, '_blank', 'noopener,noreferrer')
+
+  if (janela) {
+    event.preventDefault()
+  }
+}
+
 export default function RootLayout() {
   const { pathname } = useLocation()
   // a faixa de atalhos fica oculta na tela de treino: ela precisa caber no tablet sem rolagem
@@ -55,6 +67,7 @@ export default function RootLayout() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={`${label} (abre em nova guia)`}
+                  onClick={abrirEmNovaJanela}
                   className="inline-flex min-h-11 items-center rounded-lg border border-edge px-4 text-sm font-semibold text-snow transition hover:border-teal/60 hover:text-teal active:scale-[0.97] active:border-teal/60 active:text-teal focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal"
                 >
                   {label}
