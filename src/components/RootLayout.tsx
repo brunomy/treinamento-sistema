@@ -18,60 +18,61 @@ const ATALHOS_KOMMO = [
 ] as const
 
 // Num atalho de tela inicial (janela standalone), um link same-origin com target="_blank"
-// costuma ser aberto DENTRO da própria janela do app: a página /ir redireciona essa mesma
-// janela para o Kommo e o usuário perde a aplicação ao fechá-la. Por isso abrimos a nova
-// janela explicitamente; só cancelamos a navegação padrão se o window.open funcionar.
+// costuma ser aberto DENTRO da propria janela do app: a pagina /ir redireciona essa mesma
+// janela para o Kommo e o usuario perde a aplicacao ao fechar a aba. Por isso cancelamos
+// SEMPRE a navegacao padrao e abrimos a aba na mao, com noopener.
 //
-// ARMADILHA (não reintroduzir): window.open(..., 'noopener') SEMPRE devolve null, mesmo
-// quando a aba abre. Com a flag, o `if (janela)` nunca era verdadeiro, o preventDefault()
-// não rodava e o target="_blank" abria uma SEGUNDA aba — dois cliques em um. Por isso
-// abrimos sem a flag (para ter a referência real da janela) e anulamos o opener na mão,
-// o que tem o mesmo efeito de segurança.
+// DOIS ERROS JA COMETIDOS AQUI — nao reintroduzir nenhum deles:
+// (a) usar o retorno do window.open para decidir o preventDefault: com a flag noopener o
+//     retorno e SEMPRE null, mesmo quando a aba abre. O `if (janela)` nunca era verdadeiro,
+//     o preventDefault() nao rodava e o target="_blank" abria uma SEGUNDA aba.
+// (b) tirar a flag noopener so para conseguir esse retorno (e anular `janela.opener`
+//     depois): sem a flag a aba nasce presa ao grupo de contextos do app, e fechar a aba do
+//     Kommo derruba o treinamento inteiro. Anular o opener depois NAO desfaz esse vinculo.
+//
+// CONSEQUENCIA ACEITA: como o retorno e sempre null, nao da para detectar bloqueio de
+// pop-up. Se o navegador bloquear a abertura, o botao simplesmente nao faz nada; o usuario
+// ainda consegue usar "abrir em nova guia" pelo menu de contexto, pois o href continua no link.
 function abrirEmNovaJanela(event: React.MouseEvent<HTMLAnchorElement>) {
-  const janela: Window | null = window.open(event.currentTarget.href, '_blank')
-
-  if (janela) {
-    janela.opener = null
-    event.preventDefault()
-  }
-  // se o navegador bloquear a abertura, janela é null: deixamos a navegação padrão do
-  // link acontecer (o rel="noopener noreferrer" do <a> cobre a segurança nesse caminho).
+  event.preventDefault()
+  window.open(event.currentTarget.href, '_blank', 'noopener,noreferrer')
 }
 
 export default function RootLayout() {
   const { pathname } = useLocation()
-  // a faixa de atalhos fica oculta na tela de treino: ela precisa caber no tablet sem rolagem
+  // Na tela de treino escondemos a faixa de atalhos, o cabeçalho e o rodapé: toda essa
+  // moldura consome altura e o print precisa aparecer o maior possível no tablet, sem
+  // rolagem. A navegação não se perde — a própria tela de treino tem o link "← treinos".
   const emTreino = pathname.startsWith('/treino')
 
   return (
     <div className="flex min-h-dvh flex-col">
-      <header className="border-b border-edge">
-        <nav
-          aria-label="Navegação principal"
-          className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4"
-        >
-          <Link
-            to="/"
-            className="flex items-center gap-3 rounded focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-teal"
+      {!emTreino && (
+        <header className="border-b border-edge">
+          <nav
+            aria-label="Navegação principal"
+            className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4"
           >
-            <span className="flex size-8 items-center justify-center rounded-lg bg-teal font-mono text-sm font-bold text-teal-deep">
-              ▸
-            </span>
-            <span className="font-semibold tracking-tight">
-              Central de <span className="text-teal">treinos</span>
-            </span>
-          </Link>
-          <span className="label-mono">Guias por aplicação</span>
-        </nav>
-      </header>
+            <Link
+              to="/"
+              className="flex items-center gap-3 rounded focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-teal"
+            >
+              <span className="flex size-8 items-center justify-center rounded-lg bg-teal font-mono text-sm font-bold text-teal-deep">
+                ▸
+              </span>
+              <span className="font-semibold tracking-tight">
+                Central de <span className="text-teal">treinos</span>
+              </span>
+            </Link>
+            <span className="label-mono">Guias por aplicação</span>
+          </nav>
+        </header>
+      )}
 
       {!emTreino && (
         <div className="border-b border-edge">
           <div className="mx-auto flex w-full max-w-6xl flex-col gap-3 px-4 py-2 sm:px-6">
-            <section
-              aria-labelledby="atalhos-meus-leads-titulo"
-              className="flex flex-col gap-2"
-            >
+            <section aria-labelledby="atalhos-meus-leads-titulo" className="flex flex-col gap-2">
               <h2 id="atalhos-meus-leads-titulo" className="label-mono">
                 Meus leads
               </h2>
@@ -99,13 +100,18 @@ export default function RootLayout() {
         </div>
       )}
 
-      <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-6 sm:px-6">
+      {/* no treino o padding vertical encolhe (py-3) para sobrar altura ao print */}
+      <main
+        className={`mx-auto w-full max-w-6xl flex-1 px-4 sm:px-6 ${emTreino ? 'py-3' : 'py-6'}`}
+      >
         <Outlet />
       </main>
 
-      <footer className="border-t border-edge px-6 py-5 text-center">
-        <span className="label-mono">treino guiado por imagens · dados mocados</span>
-      </footer>
+      {!emTreino && (
+        <footer className="border-t border-edge px-6 py-5 text-center">
+          <span className="label-mono">treino guiado por imagens · dados mocados</span>
+        </footer>
+      )}
     </div>
   )
 }
