@@ -70,24 +70,24 @@ const kommoGuides: Guide[] = [
     description: 'Use o painel de filtro do Kommo para ver apenas os leads da tag Valéria.',
     steps: [
       {
-        image: '/prints/kommo/k01-leads.svg',
+        image: '/prints/kommo/k01-leads.png',
         title: 'Abrir o filtro',
         hint: 'Na barra superior, clique em “Pesquisar e filtrar”.',
         targets: [
-          { id: 'pesquisar-filtrar', x: 24.6, y: 2.4, w: 36.9, h: 5.4, label: 'Pesquisar e filtrar' },
+          { id: 'pesquisar-filtrar', x: 26.94, y: 2.76, w: 21.27, h: 5.04, label: 'Pesquisar e filtrar' },
         ],
       },
       {
-        image: '/prints/kommo/k02-filtro.svg',
+        image: '/prints/kommo/k02-filtro.png',
         title: 'Selecionar a tag',
         hint: 'Na coluna TAGS, à direita, clique na tag “Valéria”.',
-        targets: [{ id: 'tag-valeria', x: 77.9, y: 30.5, w: 5.6, h: 4.2, label: 'Valéria' }],
+        targets: [{ id: 'tag-valeria', x: 78.07, y: 28.96, w: 4.73, h: 3.62, label: 'Valéria' }],
       },
       {
-        image: '/prints/kommo/k03-filtro-aplicar.svg',
+        image: '/prints/kommo/k03-filtro-aplicar.png',
         title: 'Aplicar o filtro',
         hint: 'Clique no botão azul “Aplicar” para filtrar os leads.',
-        targets: [{ id: 'btn-aplicar', x: 49.8, y: 77.8, w: 8.4, h: 5.5, label: 'Aplicar' }],
+        targets: [{ id: 'btn-aplicar', x: 49.98, y: 82.09, w: 7.92, h: 5.69, label: 'Aplicar' }],
       },
     ],
   },
