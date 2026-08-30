@@ -17,25 +17,53 @@ const ATALHOS_KOMMO = [
   },
 ] as const
 
-// Num atalho de tela inicial (janela standalone), um link same-origin com target="_blank"
-// costuma ser aberto DENTRO da propria janela do app: a pagina /ir redireciona essa mesma
-// janela para o Kommo e o usuario perde a aplicacao ao fechar a aba. Por isso cancelamos
-// SEMPRE a navegacao padrao e abrimos a aba na mao, com noopener.
+const ATRASO_REDIRECT_MS = 600
+
+// HTML minimo mostrado na aba nova enquanto o redirect nao acontece, para ela nao
+// ficar em branco. Mantem o visual escuro do app.
+const HTML_ESPERA = `<!doctype html><html lang="pt-BR"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>Abrindo o Kommo…</title>
+<style>html,body{height:100%;margin:0}body{display:flex;align-items:center;justify-content:center;
+background:#0b0f0e;color:#e8efee;font:600 16px/1.5 system-ui,-apple-system,sans-serif}</style>
+</head><body>Abrindo o Kommo…</body></html>`
+
+// Abre o Kommo numa aba EM BRANCO do navegador e so depois redireciona essa aba.
 //
-// DOIS ERROS JA COMETIDOS AQUI — nao reintroduzir nenhum deles:
-// (a) usar o retorno do window.open para decidir o preventDefault: com a flag noopener o
-//     retorno e SEMPRE null, mesmo quando a aba abre. O `if (janela)` nunca era verdadeiro,
-//     o preventDefault() nao rodava e o target="_blank" abria uma SEGUNDA aba.
-// (b) tirar a flag noopener so para conseguir esse retorno (e anular `janela.opener`
-//     depois): sem a flag a aba nasce presa ao grupo de contextos do app, e fechar a aba do
-//     Kommo derruba o treinamento inteiro. Anular o opener depois NAO desfaz esse vinculo.
+// Por que assim, e TRES ERROS JA COMETIDOS AQUI — nao reintroduzir nenhum deles:
+// (a) deixar o link navegar direto para a URL https do Kommo: no Android os App Links
+//     capturam a navegacao e abrem o APLICATIVO nativo do Kommo, nao o navegador.
+// (b) saltar por uma pagina do nosso proprio dominio (a antiga rota /ir): num atalho de
+//     tela inicial, uma URL same-origin e aberta DENTRO da janela do app, que acaba
+//     sendo navegada para o Kommo; fechar essa janela derruba o treinamento inteiro.
+// (c) passar a flag 'noopener' no window.open: o retorno vira SEMPRE null e perdemos a
+//     referencia da aba, que e justamente o que precisamos para redireciona-la.
 //
-// CONSEQUENCIA ACEITA: como o retorno e sempre null, nao da para detectar bloqueio de
-// pop-up. Se o navegador bloquear a abertura, o botao simplesmente nao faz nada; o usuario
-// ainda consegue usar "abrir em nova guia" pelo menu de contexto, pois o href continua no link.
-function abrirEmNovaJanela(event: React.MouseEvent<HTMLAnchorElement>) {
+// O atraso de 600ms e proposital: logo apos o clique a ativacao do usuario ainda vale e
+// o Chrome entregaria o link ao app do Kommo. Esperando esse intervalo a ativacao expira
+// e a navegacao permanece no navegador.
+//
+// Se o pop-up for bloqueado, window.open devolve null e apenas saimos: o href do link
+// continua servindo de fallback (menu de contexto / "abrir em nova guia").
+function abrirKommoEmNovaAba(event: React.MouseEvent<HTMLAnchorElement>, url: string) {
   event.preventDefault()
-  window.open(event.currentTarget.href, '_blank', 'noopener,noreferrer')
+
+  const aba = window.open('', '_blank')
+  if (!aba) return
+
+  try {
+    aba.document.write(HTML_ESPERA)
+    aba.document.close()
+  } catch {
+    // alguns navegadores restringem document.write em about:blank — segue sem feedback
+  }
+
+  window.setTimeout(() => {
+    try {
+      aba.location.replace(url)
+    } catch {
+      // aba fechada pelo usuario antes do redirect
+    }
+  }, ATRASO_REDIRECT_MS)
 }
 
 export default function RootLayout() {
@@ -80,11 +108,11 @@ export default function RootLayout() {
                 {ATALHOS_KOMMO.map(({ label, href }) => (
                   <a
                     key={label}
-                    href={`/ir?u=${encodeURIComponent(href)}`}
+                    href={href}
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={`${label} (abre em nova guia)`}
-                    onClick={abrirEmNovaJanela}
+                    onClick={(event) => abrirKommoEmNovaAba(event, href)}
                     className="inline-flex min-h-11 min-w-[7.5rem] items-center justify-center rounded-lg border border-edge px-4 text-sm font-semibold text-snow transition hover:border-teal/60 hover:text-teal active:scale-[0.97] active:border-teal/60 active:text-teal focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal"
                   >
                     {label}
