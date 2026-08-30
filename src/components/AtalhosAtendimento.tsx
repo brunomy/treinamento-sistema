@@ -1,6 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 
-import { ATALHOS_ATENDIMENTO, type Atalho, type AtalhoArquivo } from '@/data/atalhos'
+import {
+  ATALHOS_COPIAR,
+  ATALHOS_DOWNLOAD,
+  type AtalhoArquivo,
+  type AtalhoTexto,
+} from '@/data/atalhos'
 
 interface Feedback {
   id: string
@@ -22,22 +27,11 @@ function baixarBlob(blob: Blob, nomeArquivo: string): void {
   URL.revokeObjectURL(objectUrl)
 }
 
-/**
- * Tenta copiar o arquivo para a area de transferencia. Navegadores recusam
- * application/pdf e video/mp4, entao o caminho normal e o fallback de download.
- */
-async function entregarArquivo(atalho: AtalhoArquivo): Promise<string> {
+/** baixa o arquivo do atalho (PDF e MP4 nao sao aceitos na area de transferencia) */
+async function baixarArquivo(atalho: AtalhoArquivo): Promise<void> {
   const resposta = await fetch(atalho.url)
   if (!resposta.ok) throw new Error(`Falha ao carregar ${atalho.url}`)
-  const blob = await resposta.blob()
-
-  try {
-    await navigator.clipboard.write([new ClipboardItem({ [atalho.mime]: blob })])
-    return 'Copiado!'
-  } catch {
-    baixarBlob(blob, atalho.nomeArquivo)
-    return 'Baixado!'
-  }
+  baixarBlob(await resposta.blob(), atalho.nomeArquivo)
 }
 
 export default function AtalhosAtendimento() {
@@ -56,15 +50,23 @@ export default function AtalhosAtendimento() {
     timerRef.current = setTimeout(() => setFeedback(null), 2000)
   }, [])
 
-  const acionar = useCallback(
-    async (atalho: Atalho) => {
+  const copiar = useCallback(
+    async (atalho: AtalhoTexto) => {
       try {
-        if (atalho.tipo === 'texto') {
-          await navigator.clipboard.writeText(atalho.texto)
-          anunciar(atalho.id, 'Copiado!')
-          return
-        }
-        anunciar(atalho.id, await entregarArquivo(atalho))
+        await navigator.clipboard.writeText(atalho.texto)
+        anunciar(atalho.id, 'Copiado!')
+      } catch {
+        anunciar(atalho.id, 'Erro')
+      }
+    },
+    [anunciar],
+  )
+
+  const baixar = useCallback(
+    async (atalho: AtalhoArquivo) => {
+      try {
+        await baixarArquivo(atalho)
+        anunciar(atalho.id, 'Baixado!')
       } catch {
         anunciar(atalho.id, 'Erro')
       }
@@ -73,20 +75,52 @@ export default function AtalhosAtendimento() {
   )
 
   return (
-    <div className="flex flex-wrap items-center gap-2 sm:gap-3">
-      {ATALHOS_ATENDIMENTO.map((atalho) => {
-        const emFeedback = feedback?.id === atalho.id
-        return (
-          <button
-            key={atalho.id}
-            type="button"
-            onClick={() => void acionar(atalho)}
-            className={CLASSES_BOTAO}
-          >
-            {emFeedback ? feedback.msg : atalho.label}
-          </button>
-        )
-      })}
+    <div className="flex flex-col gap-3">
+      <section aria-labelledby="atalhos-copiar-dados-titulo" className="flex flex-col gap-2">
+        <h2 id="atalhos-copiar-dados-titulo" className="label-mono">
+          Copiar dados
+        </h2>
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+          {ATALHOS_COPIAR.map((atalho) => {
+            const emFeedback = feedback?.id === atalho.id
+            return (
+              <button
+                key={atalho.id}
+                type="button"
+                onClick={() => void copiar(atalho)}
+                className={CLASSES_BOTAO}
+              >
+                {emFeedback ? feedback.msg : atalho.label}
+              </button>
+            )
+          })}
+        </div>
+      </section>
+
+      <section
+        aria-labelledby="atalhos-downloads-titulo"
+        className="flex flex-col gap-2 border-t border-edge pt-3"
+      >
+        <h2 id="atalhos-downloads-titulo" className="label-mono">
+          Downloads
+        </h2>
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+          {ATALHOS_DOWNLOAD.map((atalho) => {
+            const emFeedback = feedback?.id === atalho.id
+            return (
+              <button
+                key={atalho.id}
+                type="button"
+                onClick={() => void baixar(atalho)}
+                className={CLASSES_BOTAO}
+              >
+                {emFeedback ? feedback.msg : atalho.label}
+              </button>
+            )
+          })}
+        </div>
+      </section>
+
       <span role="status" aria-live="polite" className="sr-only">
         {feedback ? `${feedback.msg}` : ''}
       </span>

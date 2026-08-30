@@ -46,7 +46,7 @@ export default function RootLayout() {
 
       {!emTreino && (
         <div className="border-b border-edge">
-          <div className="mx-auto flex w-full max-w-6xl flex-col gap-2 px-4 py-2 sm:px-6">
+          <div className="mx-auto flex w-full max-w-6xl flex-col gap-3 px-4 py-2 sm:px-6">
             <div className="flex flex-wrap items-center gap-2 sm:gap-3">
               {ATALHOS_KOMMO.map(({ label, href }) => (
                 <a
@@ -62,7 +62,9 @@ export default function RootLayout() {
               ))}
             </div>
 
-            <AtalhosAtendimento />
+            <div className="border-t border-edge pt-3">
+              <AtalhosAtendimento />
+            </div>
           </div>
         </div>
       )}
