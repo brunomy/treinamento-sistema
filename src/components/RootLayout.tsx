@@ -1,5 +1,7 @@
+import { useMemo } from 'react'
 import { Link, Outlet, useLocation } from 'react-router-dom'
 
+import { urlParaNavegador } from '../lib/androidIntent'
 import AtalhosAtendimento from './AtalhosAtendimento'
 
 const ATALHOS_KOMMO = [
@@ -21,6 +23,12 @@ export default function RootLayout() {
   const { pathname } = useLocation()
   // a faixa de atalhos fica oculta na tela de treino: ela precisa caber no tablet sem rolagem
   const emTreino = pathname.startsWith('/treino')
+  // no Android o href vira intent:// para não cair no app do Kommo; calculado
+  // aqui (e não no módulo) porque depende de navigator, ausente sem DOM
+  const atalhosKommo = useMemo(
+    () => ATALHOS_KOMMO.map(({ label, href }) => ({ label, href: urlParaNavegador(href) })),
+    [],
+  )
 
   return (
     <div className="flex min-h-dvh flex-col">
@@ -48,7 +56,7 @@ export default function RootLayout() {
         <div className="border-b border-edge">
           <div className="mx-auto flex w-full max-w-6xl flex-col gap-3 px-4 py-2 sm:px-6">
             <div className="flex flex-wrap items-center gap-2 sm:gap-3">
-              {ATALHOS_KOMMO.map(({ label, href }) => (
+              {atalhosKommo.map(({ label, href }) => (
                 <a
                   key={label}
                   href={href}
