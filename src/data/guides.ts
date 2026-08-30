@@ -180,16 +180,31 @@ const kommoGuides: Guide[] = [
         ],
       },
       {
-        image: '/prints/kommo/k11-chat-conversas-iniciadas.png',
+        image: '/prints/kommo/k13-chat-etapa-fechada.png',
+        title: 'Abrir as etapas',
+        hint: 'No painel do lead, clique na etapa atual “Leads de entrada”.',
+        targets: [
+          {
+            id: 'etapa-atual',
+            x: 44.05,
+            y: 16.29,
+            w: 26.28,
+            h: 4.52,
+            label: 'Leads de entrada',
+          },
+        ],
+      },
+      {
+        image: '/prints/kommo/k14-chat-etapa-aberta.png',
         title: 'Mover a etapa',
         hint: 'Na lista de etapas, selecione “Conversas iniciadas”.',
         targets: [
           {
             id: 'etapa-conversas-iniciadas',
-            x: 43.67,
-            y: 16.14,
-            w: 25.43,
-            h: 4.98,
+            x: 44.23,
+            y: 21.72,
+            w: 25.71,
+            h: 4.07,
             label: 'Conversas iniciadas',
           },
         ],
