@@ -29,7 +29,8 @@ export const ATALHOS_COPIAR: AtalhoTexto[] = [
   {
     id: 'localizacao',
     label: 'Localização',
-    texto: 'https://maps.app.goo.gl/B376S4V8hrnyFixr9',
+    texto:
+      'Órion Business and Health Complex (Av. Portugal, 1148, Goiânia, 74150-030, GO, BR)\nhttps://maps.app.goo.gl/B376S4V8hrnyFixr9',
   },
   {
     id: 'instagram',

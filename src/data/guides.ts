@@ -74,7 +74,14 @@ const kommoGuides: Guide[] = [
         title: 'Abrir o filtro',
         hint: 'Na barra superior, clique em “Pesquisar e filtrar”.',
         targets: [
-          { id: 'pesquisar-filtrar', x: 26.94, y: 2.76, w: 21.27, h: 5.04, label: 'Pesquisar e filtrar' },
+          {
+            id: 'pesquisar-filtrar',
+            x: 26.94,
+            y: 2.76,
+            w: 21.27,
+            h: 5.04,
+            label: 'Pesquisar e filtrar',
+          },
         ],
       },
       {
@@ -102,7 +109,14 @@ const kommoGuides: Guide[] = [
         title: 'Abrir o filtro',
         hint: 'Na barra superior, clique em “Pesquisar e filtrar”.',
         targets: [
-          { id: 'pesquisar-filtrar-data', x: 27.22, y: 2.71, w: 14.84, h: 4.83, label: 'Pesquisar e filtrar' },
+          {
+            id: 'pesquisar-filtrar-data',
+            x: 27.22,
+            y: 2.71,
+            w: 14.84,
+            h: 4.83,
+            label: 'Pesquisar e filtrar',
+          },
         ],
       },
       {
@@ -123,7 +137,77 @@ const kommoGuides: Guide[] = [
         image: '/prints/kommo/k07-data-aplicar.png',
         title: 'Aplicar o filtro',
         hint: 'Com o período “Hoje” selecionado, clique no botão azul “Aplicar”.',
-        targets: [{ id: 'btn-aplicar-data', x: 49.98, y: 82.09, w: 7.92, h: 5.69, label: 'Aplicar' }],
+        targets: [
+          { id: 'btn-aplicar-data', x: 49.98, y: 82.09, w: 7.92, h: 5.69, label: 'Aplicar' },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'iniciar-atendimento',
+    appId: 'kommo',
+    title: 'Iniciar atendimento',
+    description:
+      'Aceite o lead que chegou, marque a tag, mova para Conversas iniciadas e fale com a pessoa.',
+    steps: [
+      {
+        image: '/prints/kommo/k08-chat-aceitar.png',
+        title: 'Aceitar o lead',
+        hint: 'No rodapé do painel do lead, clique em “Aceitar”.',
+        targets: [{ id: 'btn-aceitar', x: 43.86, y: 92.31, w: 6.81, h: 5.13, label: 'Aceitar' }],
+      },
+      {
+        image: '/prints/kommo/k09-chat-adicionar-tags.png',
+        title: 'Abrir as tags',
+        hint: 'No topo do painel, clique em “#ADICIONAR TAGS”.',
+        targets: [
+          {
+            id: 'btn-adicionar-tags',
+            x: 44.14,
+            y: 10.41,
+            w: 9.64,
+            h: 3.17,
+            label: 'Adicionar tags',
+          },
+        ],
+      },
+      {
+        image: '/prints/kommo/k10-chat-tag-valeria.png',
+        title: 'Escolher a tag',
+        hint: 'Na lista de tags, selecione “Valéria”.',
+        targets: [
+          { id: 'tag-valeria-chat', x: 44.61, y: 22.47, w: 5.29, h: 3.62, label: 'Valéria' },
+        ],
+      },
+      {
+        image: '/prints/kommo/k11-chat-conversas-iniciadas.png',
+        title: 'Mover a etapa',
+        hint: 'Na lista de etapas, selecione “Conversas iniciadas”.',
+        targets: [
+          {
+            id: 'etapa-conversas-iniciadas',
+            x: 43.67,
+            y: 16.14,
+            w: 25.43,
+            h: 4.98,
+            label: 'Conversas iniciadas',
+          },
+        ],
+      },
+      {
+        image: '/prints/kommo/k12-chat-mensagem.png',
+        title: 'Iniciar a conversa',
+        hint: 'No rodapé do chat, clique em “Escreva uma mensagem ou...” e fale com a pessoa.',
+        targets: [
+          {
+            id: 'campo-mensagem',
+            x: 63.8,
+            y: 92.01,
+            w: 21.5,
+            h: 4.68,
+            label: 'Escreva uma mensagem',
+          },
+        ],
       },
     ],
   },

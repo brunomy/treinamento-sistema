@@ -65,16 +65,35 @@ export default function AtalhosAtendimento() {
     setFeedback(null)
   }, [])
 
-  const copiar = useCallback(
+  const compartilharTexto = useCallback(
     async (atalho: AtalhoTexto) => {
       try {
+        const nav = navigator as NavigatorComCanShare
+
+        if (nav.canShare?.({ text: atalho.texto }) && typeof nav.share === 'function') {
+          /**
+           * Vai SOMENTE `text`: o proprio conteudo ja traz o link quando precisa,
+           * e alguns apps ignoram ou duplicam o endereco quando ele chega em
+           * `url` separado. `title` tambem fica de fora pelo mesmo motivo.
+           */
+          await navigator.share({ text: atalho.texto })
+          anunciar(atalho.id, 'Compartilhado!')
+          return
+        }
+
+        // Sem folha de compartilhamento (desktop): copiar e a alternativa.
         await navigator.clipboard.writeText(atalho.texto)
         anunciar(atalho.id, 'Copiado!')
-      } catch {
+      } catch (err: unknown) {
+        // usuario fechou a folha de compartilhamento: nao e erro
+        if (nomeDoErro(err) === 'AbortError') {
+          limparFeedback()
+          return
+        }
         anunciar(atalho.id, 'Erro')
       }
     },
-    [anunciar],
+    [anunciar, limparFeedback],
   )
 
   const obterBlob = useCallback(async (atalho: AtalhoArquivo): Promise<Blob> => {
@@ -128,9 +147,9 @@ export default function AtalhosAtendimento() {
 
   return (
     <div className="flex flex-col gap-3">
-      <section aria-labelledby="atalhos-copiar-dados-titulo" className="flex flex-col gap-2">
-        <h2 id="atalhos-copiar-dados-titulo" className="label-mono">
-          Copiar dados
+      <section aria-labelledby="atalhos-compartilhar-dados-titulo" className="flex flex-col gap-2">
+        <h2 id="atalhos-compartilhar-dados-titulo" className="label-mono">
+          Compartilhar dados
         </h2>
         <div className="flex flex-wrap items-center gap-2 sm:gap-3">
           {ATALHOS_COPIAR.map((atalho) => {
@@ -139,7 +158,7 @@ export default function AtalhosAtendimento() {
               <button
                 key={atalho.id}
                 type="button"
-                onClick={() => void copiar(atalho)}
+                onClick={() => void compartilharTexto(atalho)}
                 className={CLASSES_BOTAO}
               >
                 {emFeedback ? feedback.msg : atalho.label}
