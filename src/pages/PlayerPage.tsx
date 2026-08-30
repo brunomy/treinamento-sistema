@@ -6,6 +6,12 @@ import type { Mode, TrainingResult } from '@/data/guides'
 import { PRINT_ASPECT } from '@/data/guides'
 import { formatTime } from '@/lib/format'
 
+// Altura ocupada por tudo que NÃO é o palco do print na tela de treino: barra superior
+// do treino (voltar/título/cronômetro), barra da dica e os paddings do layout. É o que
+// descontamos da altura da viewport para calcular a largura máxima do print.
+// AJUSTE AQUI se essa moldura mudar (ex.: voltar a exibir cabeçalho/rodapé globais).
+const ALTURA_MOLDURA_TREINO = '9.5rem'
+
 export default function PlayerPage() {
   const { guideId, mode: modeParam } = useParams()
   const navigate = useNavigate()
@@ -153,7 +159,9 @@ export default function PlayerPage() {
           (paisagem) sem rolagem: altura disponível × proporção do print. */}
       <div
         className="mx-auto w-full"
-        style={{ maxWidth: `min(100%, calc((100dvh - 15rem) * ${PRINT_ASPECT}))` }}
+        style={{
+          maxWidth: `min(100%, calc((100dvh - ${ALTURA_MOLDURA_TREINO}) * ${PRINT_ASPECT}))`,
+        }}
       >
         <PrintStage
           key={`${stepIndex}-${mode}`}
