@@ -4,8 +4,7 @@
  * Coordenadas dos alvos (x, y, w, h) em PORCENTAGEM da imagem — assim os
  * hotspots escalam junto com o print em qualquer tamanho de tela.
  * Ao trocar os SVGs de public/prints/ por prints reais, basta ajustar
- * estes números (rode `npm run gen:prints` / `npm run gen:prints:condominio`
- * para ver as coordenadas de referência dos mocks).
+ * estes números.
  */
 
 export interface Target {
@@ -61,197 +60,41 @@ export interface TrainingResult {
  * de forma que o passo caiba inteiro na tela do tablet, sem rolagem.
  * Ajuste se os prints reais tiverem outra proporcao.
  */
-export const PRINT_ASPECT = 1440 / 820
+export const PRINT_ASPECT = 1058 / 663
 
-const velcoGuides: Guide[] = [
+const kommoGuides: Guide[] = [
   {
-    id: 'acessar-financeiro-compras',
-    appId: 'velco',
-    title: 'Acessar o Financeiro Compras',
-    description: 'Navegue pelo menu até o relatório Financeiro Compras.',
+    id: 'filtrar-meus-leads',
+    appId: 'kommo',
+    title: 'Filtrar meus leads',
+    description: 'Use o painel de filtro do Kommo para ver apenas os leads da tag Valéria.',
     steps: [
       {
-        image: '/prints/01-menu-fechado.svg',
-        title: 'Abrir a seção de relatórios',
-        hint: 'No menu lateral, abra a seção “Relatórios”.',
-        targets: [{ id: 'menu-relatorios', x: 1.1, y: 63.7, w: 17.2, h: 5.4, label: 'Relatórios' }],
-      },
-      {
-        image: '/prints/02-menu-relatorios-aberto.svg',
-        title: 'Escolher o relatório',
-        hint: 'No submenu que abriu, clique em “Financeiro Compras”.',
-        targets: [
-          { id: 'sub-financeiro', x: 2.8, y: 70.0, w: 15.6, h: 4.9, label: 'Financeiro Compras' },
-        ],
-      },
-      {
-        image: '/prints/03-financeiro-compras.svg',
-        title: 'Confirmar a tela',
-        hint: 'Você chegou! Confirme clicando no breadcrumb “Financeiro Compras”.',
-        targets: [{ id: 'breadcrumb', x: 41.4, y: 19.3, w: 10.4, h: 3.4, label: 'Breadcrumb' }],
-      },
-    ],
-  },
-  {
-    id: 'filtrar-por-ano',
-    appId: 'velco',
-    title: 'Filtrar gastos por ano',
-    description: 'Use o painel de filtro para mudar o ano do relatório.',
-    steps: [
-      {
-        image: '/prints/03-financeiro-compras.svg',
+        image: '/prints/kommo/k01-leads.svg',
         title: 'Abrir o filtro',
-        hint: 'Clique na barra “Filtro” para expandir as opções.',
-        targets: [{ id: 'barra-filtro', x: 21.1, y: 27.8, w: 77.2, h: 6.8, label: 'Filtro' }],
-      },
-      {
-        image: '/prints/04-filtro-aberto.svg',
-        title: 'Abrir o seletor de ano',
-        hint: 'Clique no campo “Ano” para ver os anos disponíveis.',
-        targets: [{ id: 'select-ano', x: 22.9, y: 40.7, w: 15.3, h: 5.4, label: 'Ano' }],
-      },
-      {
-        image: '/prints/05-ano-dropdown.svg',
-        title: 'Escolher o ano',
-        hint: 'Selecione “2025” na lista.',
-        targets: [{ id: 'opcao-2025', x: 23.2, y: 52.7, w: 14.7, h: 4.9, label: '2025' }],
-      },
-      {
-        image: '/prints/04-filtro-aberto.svg',
-        title: 'Aplicar',
-        hint: 'Clique em “Aplicar filtro” para atualizar o relatório.',
-        targets: [{ id: 'aplicar', x: 86.1, y: 40.7, w: 10.8, h: 5.4, label: 'Aplicar filtro' }],
-      },
-    ],
-  },
-  {
-    id: 'exportar-relatorio',
-    appId: 'velco',
-    title: 'Exportar o relatório',
-    description: 'Gere um arquivo Excel com os dados do relatório.',
-    steps: [
-      {
-        image: '/prints/03-financeiro-compras.svg',
-        title: 'Iniciar exportação',
-        hint: 'Clique no botão “Exportar”, no canto superior direito.',
-        targets: [{ id: 'btn-exportar', x: 86.8, y: 12.7, w: 10.1, h: 4.9, label: 'Exportar' }],
-      },
-      {
-        image: '/prints/06-modal-exportar.svg',
-        title: 'Escolher o formato',
-        hint: 'No modal, escolha o formato “Excel (.xlsx)”.',
-        targets: [{ id: 'formato-excel', x: 51.4, y: 40.2, w: 13.9, h: 13.4, label: 'Excel' }],
-      },
-      {
-        image: '/prints/06-modal-exportar.svg',
-        title: 'Confirmar',
-        hint: 'Clique em “Exportar” para baixar o arquivo.',
-        targets: [{ id: 'confirmar', x: 51.4, y: 58.5, w: 13.9, h: 6.3, label: 'Exportar' }],
-      },
-    ],
-  },
-  {
-    id: 'comparar-meses',
-    appId: 'velco',
-    title: 'Comparar meses de gastos',
-    description: 'Selecione dois meses e compare os gastos entre eles.',
-    steps: [
-      {
-        image: '/prints/03-financeiro-compras.svg',
-        title: 'Entrar no modo comparação',
-        hint: 'Clique em “Tabela de comparação”.',
+        hint: 'Na barra superior, clique em “Pesquisar e filtrar”.',
         targets: [
-          {
-            id: 'btn-comparacao',
-            x: 84.7,
-            y: 39.8,
-            w: 12.2,
-            h: 4.1,
-            label: 'Tabela de comparação',
-          },
+          { id: 'pesquisar-filtrar', x: 24.6, y: 2.4, w: 36.9, h: 5.4, label: 'Pesquisar e filtrar' },
         ],
       },
       {
-        image: '/prints/07-comparacao.svg',
-        title: 'Selecionar os meses',
-        hint: 'Este passo tem DOIS cliques: selecione JANEIRO e AGOSTO.',
-        targets: [
-          { id: 'mes-janeiro', x: 22.5, y: 48.8, w: 5.8, h: 6.8, label: 'Janeiro' },
-          { id: 'mes-agosto', x: 67.2, y: 48.8, w: 5.8, h: 6.8, label: 'Agosto' },
-        ],
+        image: '/prints/kommo/k02-filtro.svg',
+        title: 'Selecionar a tag',
+        hint: 'Na coluna TAGS, à direita, clique na tag “Valéria”.',
+        targets: [{ id: 'tag-valeria', x: 77.9, y: 30.5, w: 5.6, h: 4.2, label: 'Valéria' }],
       },
       {
-        image: '/prints/07-comparacao.svg',
-        title: 'Comparar',
-        hint: 'Clique em “Comparar” para ver o resultado.',
-        targets: [{ id: 'btn-comparar', x: 86.8, y: 29.0, w: 10.1, h: 4.4, label: 'Comparar' }],
-      },
-    ],
-  },
-]
-
-const condominioGuides: Guide[] = [
-  {
-    id: 'registrar-entrega',
-    appId: 'condominio',
-    title: 'Registrar entrega de encomenda',
-    description: 'Encontre a encomenda pendente e marque como entregue ao morador.',
-    steps: [
-      {
-        image: '/prints/condominio/c01-dashboard.svg',
-        title: 'Abrir Encomendas',
-        hint: 'No menu lateral, clique em “Encomendas”.',
-        targets: [{ id: 'menu-encomendas', x: 0.8, y: 30.2, w: 15.8, h: 4.9, label: 'Encomendas' }],
-      },
-      {
-        image: '/prints/condominio/c02-lista-encomendas.svg',
-        title: 'Entregar a encomenda',
-        hint: 'Na primeira linha (Beatriz Lizarda), clique em “Entregar”.',
-        targets: [{ id: 'btn-entregar', x: 90.3, y: 26.8, w: 6.9, h: 4.4, label: 'Entregar' }],
-      },
-      {
-        image: '/prints/condominio/c03-confirmar-entrega.svg',
-        title: 'Confirmar',
-        hint: 'Confira o destinatário e clique em “Confirmar entrega”.',
-        targets: [
-          { id: 'btn-confirmar', x: 51.4, y: 57.3, w: 12.5, h: 6.3, label: 'Confirmar entrega' },
-        ],
-      },
-    ],
-  },
-  {
-    id: 'cadastrar-encomenda',
-    appId: 'condominio',
-    title: 'Cadastrar nova encomenda',
-    description: 'Registre a chegada de um pacote na portaria.',
-    steps: [
-      {
-        image: '/prints/condominio/c02-lista-encomendas.svg',
-        title: 'Abrir o cadastro',
-        hint: 'Clique em “+ Nova encomenda”, no canto superior direito.',
-        targets: [{ id: 'btn-nova', x: 86.9, y: 12.7, w: 11.9, h: 4.9, label: 'Nova encomenda' }],
-      },
-      {
-        image: '/prints/condominio/c04-nova-encomenda.svg',
-        title: 'Identificar o morador',
-        hint: 'Comece pelo campo “Destinatário” para buscar o morador.',
-        targets: [
-          { id: 'campo-destinatario', x: 34.7, y: 35.4, w: 30.6, h: 5.4, label: 'Destinatário' },
-        ],
-      },
-      {
-        image: '/prints/condominio/c04-nova-encomenda.svg',
-        title: 'Salvar',
-        hint: 'Com os dados preenchidos, clique em “Salvar”.',
-        targets: [{ id: 'btn-salvar', x: 51.4, y: 65.9, w: 13.9, h: 6.3, label: 'Salvar' }],
+        image: '/prints/kommo/k03-filtro-aplicar.svg',
+        title: 'Aplicar o filtro',
+        hint: 'Clique no botão azul “Aplicar” para filtrar os leads.',
+        targets: [{ id: 'btn-aplicar', x: 49.8, y: 77.8, w: 8.4, h: 5.5, label: 'Aplicar' }],
       },
     ],
   },
 ]
 
 export const apps: TrainingApp[] = [
-  { id: 'velco', name: 'Velco', module: 'Financeiro Compras', guides: velcoGuides },
-  { id: 'condominio', name: 'Condomínio App', module: 'Encomendas', guides: condominioGuides },
+  { id: 'kommo', name: 'Kommo', module: 'Leads', guides: kommoGuides },
 ]
 
 const allGuides: Guide[] = apps.flatMap((a) => a.guides)

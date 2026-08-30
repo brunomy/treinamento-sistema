@@ -1,0 +1,147 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1058 663" font-family="Arial, sans-serif">
+<defs>
+<filter id="cs" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="1" stdDeviation="2" flood-color="#000" flood-opacity="0.08"/></filter>
+<filter id="ps" x="-10%" y="-10%" width="120%" height="120%"><feDropShadow dx="0" dy="4" stdDeviation="10" flood-color="#000" flood-opacity="0.18"/></filter>
+</defs>
+<rect width="1058" height="663" fill="#fff"/>
+<rect x="67" y="66" width="991" height="597" rx="0" fill="#e6e9ed"/>
+<rect x="95" y="90" width="290" height="14" rx="3" fill="#d3d8de"/>
+<rect x="95" y="120" width="290" height="84" rx="6" fill="#f2f4f6"/>
+<rect x="95" y="216" width="290" height="84" rx="6" fill="#f2f4f6"/>
+<rect x="95" y="312" width="290" height="84" rx="6" fill="#f2f4f6"/>
+<rect x="95" y="408" width="290" height="84" rx="6" fill="#f2f4f6"/>
+<rect x="425" y="90" width="290" height="14" rx="3" fill="#d3d8de"/>
+<rect x="425" y="120" width="290" height="84" rx="6" fill="#f2f4f6"/>
+<rect x="425" y="216" width="290" height="84" rx="6" fill="#f2f4f6"/>
+<rect x="425" y="312" width="290" height="84" rx="6" fill="#f2f4f6"/>
+<rect x="425" y="408" width="290" height="84" rx="6" fill="#f2f4f6"/>
+<rect x="755" y="90" width="290" height="14" rx="3" fill="#d3d8de"/>
+<rect x="755" y="120" width="290" height="84" rx="6" fill="#f2f4f6"/>
+<rect x="755" y="216" width="290" height="84" rx="6" fill="#f2f4f6"/>
+<rect x="755" y="312" width="290" height="84" rx="6" fill="#f2f4f6"/>
+<rect x="755" y="408" width="290" height="84" rx="6" fill="#f2f4f6"/>
+<rect x="250" y="66" width="800" height="556" rx="4" fill="#fff" filter="url(#ps)"/>
+<text x="265" y="100" font-size="11" fill="#2f80ed">✎</text>
+<text x="282" y="100" font-size="12" fill="#2f80ed">Leads ativos</text>
+<text x="265" y="132" font-size="11.5" fill="#374151">Meus leads</text>
+<text x="265" y="162" font-size="11.5" fill="#374151">Leads ganhos</text>
+<text x="265" y="192" font-size="11.5" fill="#374151">Leads perdidos</text>
+<circle cx="269" cy="218" r="4" fill="#f5c518"/>
+<text x="279" y="222" font-size="11.5" fill="#374151">Leads sem Tarefas</text>
+<circle cx="269" cy="248" r="4" fill="#eb5757"/>
+<text x="279" y="252" font-size="11.5" fill="#374151">Leads com Tarefas Atrasa…</text>
+<text x="265" y="290" font-size="11" fill="#2f80ed" font-weight="bold">SALVAR</text>
+<text x="430" y="96" font-size="10" fill="#9aa4b2" font-weight="bold">PROPRIEDADES DE LEAD</text>
+<rect x="430" y="106" width="360" height="30" rx="4" fill="#fff" stroke="#d8dde3"/>
+<text x="440" y="125.0" font-size="11" fill="#9aa4b2">Nome do lead</text>
+<rect x="430" y="142" width="360" height="30" rx="4" fill="#fff" stroke="#d8dde3"/>
+<text x="440" y="161.0" font-size="11" fill="#9aa4b2">A qualquer hora</text>
+<rect x="430" y="178" width="360" height="30" rx="4" fill="#fff" stroke="#2f80ed"/>
+<text x="440" y="197.0" font-size="11" fill="#9aa4b2">Etapas ativas</text>
+<text x="778" y="197.0" font-size="9" fill="#2f80ed">✕</text>
+<rect x="430" y="214" width="360" height="30" rx="4" fill="#fff" stroke="#d8dde3"/>
+<text x="440" y="233.0" font-size="11" fill="#9aa4b2">Lead de entrada tipo: Todos valores</text>
+<rect x="430" y="250" width="360" height="30" rx="4" fill="#fff" stroke="#d8dde3"/>
+<text x="440" y="269.0" font-size="11" fill="#9aa4b2">Lead fonte: Todos valores</text>
+<rect x="430" y="286" width="360" height="30" rx="4" fill="#fff" stroke="#d8dde3"/>
+<text x="440" y="305.0" font-size="11" fill="#9aa4b2">Usuários</text>
+<rect x="430" y="322" width="360" height="30" rx="4" fill="#fff" stroke="#d8dde3"/>
+<text x="440" y="341.0" font-size="11" fill="#9aa4b2">Criado por</text>
+<rect x="430" y="358" width="360" height="30" rx="4" fill="#fff" stroke="#d8dde3"/>
+<text x="440" y="377.0" font-size="11" fill="#9aa4b2">Modificado por</text>
+<rect x="430" y="394" width="360" height="30" rx="4" fill="#fff" stroke="#d8dde3"/>
+<text x="440" y="413.0" font-size="11" fill="#9aa4b2">Tarefas: Todos valores</text>
+<rect x="430" y="430" width="172" height="30" rx="4" fill="#fff" stroke="#d8dde3"/>
+<text x="440" y="449.0" font-size="11" fill="#9aa4b2">Valor de venda</text>
+<rect x="618" y="430" width="172" height="30" rx="4" fill="#fff" stroke="#d8dde3"/>
+<text x="430" y="478" font-size="10" fill="#9aa4b2" font-weight="bold">UTM's</text>
+<rect x="430" y="484" width="360" height="30" rx="4" fill="#fff" stroke="#d8dde3"/>
+<text x="440" y="503.0" font-size="11" fill="#9aa4b2">utm_source</text>
+<rect x="527" y="516" width="89" height="36" rx="4" fill="#2f80ed"/>
+<text x="571.5" y="539" font-size="12" fill="#fff" font-weight="bold" text-anchor="middle">Aplicar</text>
+<text x="632" y="539" font-size="11.5" fill="#9aa4b2">Redefinir</text>
+<text x="830" y="96" font-size="10" fill="#2f80ed" font-weight="bold">TAGS ✕</text>
+<circle cx="944" cy="92" r="5" fill="none" stroke="#9aa4b2"/>
+<text x="954" y="96" font-size="10" fill="#6b7684">E</text>
+<circle cx="978" cy="92" r="5" fill="none" stroke="#2f80ed"/>
+<circle cx="978" cy="92" r="2.5" fill="#2f80ed"/>
+<text x="988" y="96" font-size="10" fill="#2f80ed">Ou</text>
+<rect x="830" y="106" width="210" height="30" rx="4" fill="#fff" stroke="#d8dde3"/>
+<text x="840" y="125.0" font-size="11" fill="#9aa4b2">Localizar tags</text>
+<rect x="824" y="164" width="33" height="28" rx="4" fill="#f2f4f7" stroke="#e0e4e9"/>
+<text x="840.5" y="182" font-size="9.5" fill="#4b5563" text-anchor="middle">Ana</text>
+<text x="865" y="182" font-size="9.5" fill="#9aa4b2">336</text>
+<rect x="824" y="202" width="59" height="28" rx="4" fill="#fff" stroke="#2f80ed"/>
+<text x="849" y="220" font-size="9.5" fill="#2f80ed" text-anchor="middle">Valéria</text>
+<text x="875" y="220" font-size="10" fill="#2f80ed" text-anchor="middle">×</text>
+<text x="891" y="220" font-size="9.5" fill="#9aa4b2">96</text>
+<rect x="824" y="240" width="66" height="28" rx="4" fill="#f2f4f7" stroke="#e0e4e9"/>
+<text x="857.0" y="258" font-size="9.5" fill="#4b5563" text-anchor="middle">Follow up</text>
+<text x="898" y="258" font-size="9.5" fill="#9aa4b2">55</text>
+<rect x="824" y="278" width="55" height="28" rx="4" fill="#f2f4f7" stroke="#e0e4e9"/>
+<text x="851.5" y="296" font-size="9.5" fill="#4b5563" text-anchor="middle">Douglas</text>
+<text x="887" y="296" font-size="9.5" fill="#9aa4b2">40</text>
+<rect x="824" y="316" width="50" height="28" rx="4" fill="#f2f4f7" stroke="#e0e4e9"/>
+<text x="849.0" y="334" font-size="9.5" fill="#4b5563" text-anchor="middle">Debora</text>
+<text x="882" y="334" font-size="9.5" fill="#9aa4b2">18</text>
+<rect x="824" y="354" width="71" height="28" rx="4" fill="#f2f4f7" stroke="#e0e4e9"/>
+<text x="859.5" y="372" font-size="9.5" fill="#4b5563" text-anchor="middle">Presencial</text>
+<text x="903" y="372" font-size="9.5" fill="#9aa4b2">17</text>
+<rect x="824" y="392" width="66" height="28" rx="4" fill="#f2f4f7" stroke="#e0e4e9"/>
+<text x="857.0" y="410" font-size="9.5" fill="#4b5563" text-anchor="middle">atvaleria</text>
+<text x="898" y="410" font-size="9.5" fill="#9aa4b2">14</text>
+<rect x="824" y="430" width="44" height="28" rx="4" fill="#f2f4f7" stroke="#e0e4e9"/>
+<text x="846.0" y="448" font-size="9.5" fill="#4b5563" text-anchor="middle">18:00</text>
+<text x="876" y="448" font-size="9.5" fill="#9aa4b2">9</text>
+<rect x="824" y="468" width="68" height="28" rx="4" fill="#f2f4f7" stroke="#e0e4e9"/>
+<text x="858.0" y="486" font-size="9.5" fill="#4b5563" text-anchor="middle">Instagram,</text>
+<text x="900" y="486" font-size="9.5" fill="#9aa4b2">9</text>
+<rect x="824" y="506" width="71" height="28" rx="4" fill="#f2f4f7" stroke="#e0e4e9"/>
+<text x="859.5" y="524" font-size="9.5" fill="#4b5563" text-anchor="middle">14 de Maio</text>
+<text x="903" y="524" font-size="9.5" fill="#9aa4b2">6</text>
+<rect x="824" y="544" width="46" height="28" rx="4" fill="#f2f4f7" stroke="#e0e4e9"/>
+<text x="847.0" y="562" font-size="9.5" fill="#4b5563" text-anchor="middle">15/07</text>
+<text x="878" y="562" font-size="9.5" fill="#9aa4b2">6</text>
+<rect x="824" y="582" width="137" height="28" rx="4" fill="#f2f4f7" stroke="#e0e4e9"/>
+<text x="892.5" y="600" font-size="9.5" fill="#4b5563" text-anchor="middle">27/06 primeiro contato</text>
+<text x="969" y="600" font-size="9.5" fill="#9aa4b2">6</text>
+<rect x="0" y="0" width="67" height="663" rx="0" fill="#1a2332"/>
+<circle cx="33.5" cy="26" r="12" fill="#8b98ab"/>
+<text x="33.5" y="52" font-size="8" fill="#8b98ab" text-anchor="middle">Conta</text>
+<rect x="25.5" y="74" width="16" height="16" rx="4" fill="#8b98ab"/>
+<text x="33.5" y="102" font-size="8" fill="#8b98ab" text-anchor="middle">Painel</text>
+<rect x="25.5" y="136" width="16" height="16" rx="4" fill="#2f80ed"/>
+<text x="33.5" y="164" font-size="8" fill="#2f80ed" text-anchor="middle">Leads</text>
+<rect x="25.5" y="198" width="16" height="16" rx="4" fill="#8b98ab"/>
+<text x="33.5" y="226" font-size="7" fill="#8b98ab" text-anchor="middle">Funil de vendas</text>
+<rect x="25.5" y="260" width="16" height="16" rx="4" fill="#8b98ab"/>
+<text x="33.5" y="288" font-size="8" fill="#8b98ab" text-anchor="middle">Chats</text>
+<circle cx="45" cy="261" r="7" fill="#eb5757"/>
+<text x="45" y="263.5" font-size="7" fill="#fff" text-anchor="middle">22</text>
+<rect x="25.5" y="322" width="16" height="16" rx="4" fill="#8b98ab"/>
+<text x="33.5" y="350" font-size="7" fill="#8b98ab" text-anchor="middle">Calendário</text>
+<rect x="25.5" y="384" width="16" height="16" rx="4" fill="#8b98ab"/>
+<text x="33.5" y="412" font-size="8" fill="#8b98ab" text-anchor="middle">Segmentos</text>
+<rect x="25.5" y="446" width="16" height="16" rx="4" fill="#8b98ab"/>
+<text x="33.5" y="474" font-size="8" fill="#8b98ab" text-anchor="middle">Listas</text>
+<circle cx="33.5" cy="632" r="9" fill="#8b98ab"/>
+<circle cx="33.5" cy="644" r="2" fill="#8b98ab"/>
+<rect x="67" y="0" width="991" height="66" rx="0" fill="#fff"/>
+<line x1="67" y1="66" x2="1058" y2="66" stroke="#e5e8ec"/>
+<text x="90" y="40" font-size="16" fill="#1f2937" font-weight="bold">LEADS</text>
+<text x="152" y="40" font-size="12" fill="#6b7684">∨</text>
+<rect x="260" y="16" width="390" height="36" rx="6" fill="#f2f4f7" stroke="#d8dde3"/>
+<rect x="268" y="22" width="86" height="24" rx="12" fill="#d9f2d0"/>
+<text x="311" y="38" font-size="10.5" fill="#4a7c3a" text-anchor="middle">Leads ativos</text>
+<rect x="360" y="22" width="30" height="24" rx="12" fill="#e2e6ea"/>
+<text x="375" y="38" font-size="10.5" fill="#6b7684" text-anchor="middle">+2</text>
+<text x="398" y="38" font-size="12" fill="#9aa4b2">Pesquisar e filtrar</text>
+<text x="642" y="38" font-size="10.5" fill="#2f80ed" font-weight="bold" text-anchor="end">APLICA…</text>
+<text x="818" y="38" font-size="12" fill="#9aa4b2" text-anchor="end">3662 leads: R$637.850</text>
+<text x="828" y="38" font-size="10" fill="#9aa4b2">✕</text>
+<text x="848" y="38" font-size="13" fill="#6b7684" font-weight="bold">···</text>
+<rect x="868" y="17" width="104" height="32" rx="4" fill="#fff" stroke="#d8dde3"/>
+<text x="920" y="37" font-size="9.5" fill="#4b5563" text-anchor="middle">⚡ AUTOMATIZE</text>
+<rect x="982" y="17" width="64" height="32" rx="4" fill="#2f80ed"/>
+<text x="1014" y="37" font-size="10" fill="#fff" font-weight="bold" text-anchor="middle">+ LEAD</text>
+</svg>
