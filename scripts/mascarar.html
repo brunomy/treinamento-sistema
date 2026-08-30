@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Marcar regioes para mascarar</title>
+    <style>
+      :root {
+        --bg: #14161a;
+        --painel: #1e2128;
+        --borda: #313640;
+        --texto: #e6e8ec;
+        --suave: #98a0ae;
+        --acento: #6c5ce7;
+        --perigo: #e2574c;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--texto);
+        font:
+          14px/1.5 system-ui,
+          sans-serif;
+      }
+      header {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        align-items: center;
+        padding: 12px 16px;
+        background: var(--painel);
+        border-bottom: 1px solid var(--borda);
+        position: sticky;
+        top: 0;
+        z-index: 10;
+      }
+      h1 {
+        font-size: 15px;
+        margin: 0 12px 0 0;
+        font-weight: 600;
+      }
+      button,
+      select {
+        background: #2a2e37;
+        color: var(--texto);
+        border: 1px solid var(--borda);
+        border-radius: 6px;
+        padding: 6px 12px;
+        font: inherit;
+        cursor: pointer;
+      }
+      button:hover,
+      select:hover {
+        border-color: var(--acento);
+      }
+      button.primario {
+        background: var(--acento);
+        border-color: var(--acento);
+        font-weight: 600;
+      }
+      button.perigo {
+        color: var(--perigo);
+      }
+      .conta {
+        color: var(--suave);
+        margin-left: auto;
+      }
+      main {
+        padding: 16px;
+      }
+      #palco {
+        position: relative;
+        display: inline-block;
+        line-height: 0;
+        cursor: crosshair;
+        user-select: none;
+      }
+      #palco img {
+        display: block;
+        max-width: 100%;
+      }
+      .caixa {
+        position: absolute;
+        border: 2px solid var(--perigo);
+        background: rgba(226, 87, 76, 0.28);
+        cursor: pointer;
+      }
+      .caixa:hover {
+        background: rgba(226, 87, 76, 0.45);
+      }
+      #saida {
+        width: 100%;
+        min-height: 160px;
+        margin-top: 16px;
+        background: var(--painel);
+        color: var(--texto);
+        border: 1px solid var(--borda);
+        border-radius: 6px;
+        padding: 12px;
+        font-family: ui-monospace, monospace;
+        font-size: 12px;
+      }
+      .dica {
+        color: var(--suave);
+        font-size: 13px;
+        margin: 8px 0 0;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Marcar regioes para mascarar</h1>
+      <button id="anterior">&larr; Anterior</button>
+      <select id="seletor"></select>
+      <button id="proximo">Proximo &rarr;</button>
+      <button id="desfazer">Desfazer</button>
+      <button id="limpar" class="perigo">Limpar imagem</button>
+      <button id="copiar" class="primario">Copiar JSON de tudo</button>
+      <span class="conta" id="conta"></span>
+    </header>
+
+    <main>
+      <div id="palco"><img id="print" alt="" /></div>
+      <p class="dica">
+        Arraste para desenhar um retangulo sobre o que deve ser borrado. Clique em um
+        retangulo para remove-lo. As marcacoes ficam salvas no navegador enquanto voce
+        navega entre as imagens.
+      </p>
+      <textarea id="saida" readonly spellcheck="false"></textarea>
+    </main>
+
+    <script>
+      const ARQUIVOS = [
+        'k01-leads.png',
+        'k02-filtro.png',
+        'k03-filtro-aplicar.png',
+        'k04-lista-filtrada.png',
+        'k05-filtro-data.png',
+        'k06-data-hoje.png',
+        'k07-data-aplicar.png',
+        'k08-chat-aceitar.png',
+        'k09-chat-adicionar-tags.png',
+        'k10-chat-tag-valeria.png',
+        'k12-chat-mensagem.png',
+        'k13-chat-etapa-fechada.png',
+        'k14-chat-etapa-aberta.png',
+      ]
+      const CHAVE = 'mascaras-kommo'
+
+      const palco = document.getElementById('palco')
+      const img = document.getElementById('print')
+      const seletor = document.getElementById('seletor')
+      const saida = document.getElementById('saida')
+      const conta = document.getElementById('conta')
+
+      let regioes = JSON.parse(localStorage.getItem(CHAVE) || '{}')
+      let indice = 0
+
+      ARQUIVOS.forEach((a, i) => seletor.add(new Option(`${i + 1}. ${a}`, i)))
+
+      function atual() {
+        return ARQUIVOS[indice]
+      }
+
+      /** Fator entre o tamanho natural do PNG e o exibido na tela. */
+      function escala() {
+        return img.naturalWidth / img.clientWidth || 1
+      }
+
+      function salvar() {
+        localStorage.setItem(CHAVE, JSON.stringify(regioes))
+        saida.value = JSON.stringify(regioes, null, 2)
+        const total = Object.values(regioes).reduce((s, r) => s + r.length, 0)
+        conta.textContent = `${(regioes[atual()] || []).length} nesta imagem · ${total} no total`
+      }
+
+      function desenhar() {
+        palco.querySelectorAll('.caixa').forEach((c) => c.remove())
+        const f = escala()
+        ;(regioes[atual()] || []).forEach(([x, y, w, h], i) => {
+          const el = document.createElement('div')
+          el.className = 'caixa'
+          el.style.left = x / f + 'px'
+          el.style.top = y / f + 'px'
+          el.style.width = w / f + 'px'
+          el.style.height = h / f + 'px'
+          el.title = `${w}x${h} em (${x}, ${y}) — clique para remover`
+          el.onclick = (e) => {
+            e.stopPropagation()
+            regioes[atual()].splice(i, 1)
+            salvar()
+            desenhar()
+          }
+          palco.appendChild(el)
+        })
+        salvar()
+      }
+
+      function carregar(i) {
+        indice = (i + ARQUIVOS.length) % ARQUIVOS.length
+        seletor.value = indice
+        img.src = `/prints/kommo/${atual()}?v=${Date.now()}`
+      }
+
+      img.onload = desenhar
+      window.addEventListener('resize', desenhar)
+
+      // desenho por arrasto
+      let ini = null
+      let previa = null
+
+      palco.addEventListener('mousedown', (e) => {
+        if (e.target.classList.contains('caixa')) return
+        const r = palco.getBoundingClientRect()
+        ini = { x: e.clientX - r.left, y: e.clientY - r.top }
+        previa = document.createElement('div')
+        previa.className = 'caixa'
+        palco.appendChild(previa)
+      })
+
+      palco.addEventListener('mousemove', (e) => {
+        if (!ini) return
+        const r = palco.getBoundingClientRect()
+        const x = e.clientX - r.left
+        const y = e.clientY - r.top
+        previa.style.left = Math.min(ini.x, x) + 'px'
+        previa.style.top = Math.min(ini.y, y) + 'px'
+        previa.style.width = Math.abs(x - ini.x) + 'px'
+        previa.style.height = Math.abs(y - ini.y) + 'px'
+      })
+
+      window.addEventListener('mouseup', (e) => {
+        if (!ini) return
+        const r = palco.getBoundingClientRect()
+        const x = e.clientX - r.left
+        const y = e.clientY - r.top
+        const f = escala()
+        const caixa = [
+          Math.round(Math.min(ini.x, x) * f),
+          Math.round(Math.min(ini.y, y) * f),
+          Math.round(Math.abs(x - ini.x) * f),
+          Math.round(Math.abs(y - ini.y) * f),
+        ]
+        ini = null
+        previa?.remove()
+        previa = null
+        if (caixa[2] < 5 || caixa[3] < 5) return // clique acidental
+        ;(regioes[atual()] ||= []).push(caixa)
+        desenhar()
+      })
+
+      document.getElementById('proximo').onclick = () => carregar(indice + 1)
+      document.getElementById('anterior').onclick = () => carregar(indice - 1)
+      seletor.onchange = () => carregar(Number(seletor.value))
+
+      document.getElementById('desfazer').onclick = () => {
+        regioes[atual()]?.pop()
+        desenhar()
+      }
+      document.getElementById('limpar').onclick = () => {
+        delete regioes[atual()]
+        desenhar()
+      }
+      document.getElementById('copiar').onclick = async () => {
+        await navigator.clipboard.writeText(JSON.stringify(regioes, null, 2))
+        conta.textContent = 'JSON copiado para a area de transferencia'
+      }
+
+      document.addEventListener('keydown', (e) => {
+        if (e.target.tagName === 'TEXTAREA') return
+        if (e.key === 'ArrowRight') carregar(indice + 1)
+        if (e.key === 'ArrowLeft') carregar(indice - 1)
+        if (e.key === 'z' && (e.ctrlKey || e.metaKey)) {
+          regioes[atual()]?.pop()
+          desenhar()
+        }
+      })
+
+      carregar(0)
+    </script>
+  </body>
+</html>
