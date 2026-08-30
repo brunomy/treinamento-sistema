@@ -21,12 +21,21 @@ const ATALHOS_KOMMO = [
 // costuma ser aberto DENTRO da própria janela do app: a página /ir redireciona essa mesma
 // janela para o Kommo e o usuário perde a aplicação ao fechá-la. Por isso abrimos a nova
 // janela explicitamente; só cancelamos a navegação padrão se o window.open funcionar.
+//
+// ARMADILHA (não reintroduzir): window.open(..., 'noopener') SEMPRE devolve null, mesmo
+// quando a aba abre. Com a flag, o `if (janela)` nunca era verdadeiro, o preventDefault()
+// não rodava e o target="_blank" abria uma SEGUNDA aba — dois cliques em um. Por isso
+// abrimos sem a flag (para ter a referência real da janela) e anulamos o opener na mão,
+// o que tem o mesmo efeito de segurança.
 function abrirEmNovaJanela(event: React.MouseEvent<HTMLAnchorElement>) {
-  const janela = window.open(event.currentTarget.href, '_blank', 'noopener,noreferrer')
+  const janela: Window | null = window.open(event.currentTarget.href, '_blank')
 
   if (janela) {
+    janela.opener = null
     event.preventDefault()
   }
+  // se o navegador bloquear a abertura, janela é null: deixamos a navegação padrão do
+  // link acontecer (o rel="noopener noreferrer" do <a> cobre a segurança nesse caminho).
 }
 
 export default function RootLayout() {
