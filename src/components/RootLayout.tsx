@@ -1,5 +1,7 @@
 import { Link, Outlet, useLocation } from 'react-router-dom'
 
+import AtalhosAtendimento from './AtalhosAtendimento'
+
 const ATALHOS_KOMMO = [
   {
     label: 'Hoje',
@@ -44,19 +46,23 @@ export default function RootLayout() {
 
       {!emTreino && (
         <div className="border-b border-edge">
-          <div className="mx-auto flex w-full max-w-6xl flex-wrap items-center gap-2 px-4 py-2 sm:gap-3 sm:px-6">
-            {ATALHOS_KOMMO.map(({ label, href }) => (
-              <a
-                key={label}
-                href={href}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={`${label} (abre em nova guia)`}
-                className="inline-flex min-h-11 items-center rounded-lg border border-edge px-4 text-sm font-semibold text-snow transition hover:border-teal/60 hover:text-teal active:scale-[0.97] active:border-teal/60 active:text-teal focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal"
-              >
-                {label}
-              </a>
-            ))}
+          <div className="mx-auto flex w-full max-w-6xl flex-col gap-2 px-4 py-2 sm:px-6">
+            <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+              {ATALHOS_KOMMO.map(({ label, href }) => (
+                <a
+                  key={label}
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`${label} (abre em nova guia)`}
+                  className="inline-flex min-h-11 items-center rounded-lg border border-edge px-4 text-sm font-semibold text-snow transition hover:border-teal/60 hover:text-teal active:scale-[0.97] active:border-teal/60 active:text-teal focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal"
+                >
+                  {label}
+                </a>
+              ))}
+            </div>
+
+            <AtalhosAtendimento />
           </div>
         </div>
       )}

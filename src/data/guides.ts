@@ -119,6 +119,12 @@ const kommoGuides: Guide[] = [
         hint: 'Na lista que abriu, selecione “Hoje”.',
         targets: [{ id: 'opcao-hoje', x: 50.08, y: 42.44, w: 25.87, h: 3.8, label: 'Hoje' }],
       },
+      {
+        image: '/prints/kommo/k07-data-aplicar.png',
+        title: 'Aplicar o filtro',
+        hint: 'Com o período “Hoje” selecionado, clique no botão azul “Aplicar”.',
+        targets: [{ id: 'btn-aplicar-data', x: 49.98, y: 82.09, w: 7.92, h: 5.69, label: 'Aplicar' }],
+      },
     ],
   },
 ]
