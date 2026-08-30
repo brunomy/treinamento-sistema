@@ -12,6 +12,11 @@ interface Feedback {
   msg: string
 }
 
+/** `canShare` nao esta na tipagem padrao do Navigator, entao checamos sem `any` */
+type NavigatorComCanShare = Navigator & {
+  canShare?: (dados?: ShareData) => boolean
+}
+
 const CLASSES_BOTAO =
   'inline-flex min-h-11 min-w-[7.5rem] items-center justify-center rounded-lg border border-edge px-4 text-sm font-semibold text-snow transition hover:border-teal/60 hover:text-teal active:scale-[0.97] active:border-teal/60 active:text-teal focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal'
 
@@ -27,16 +32,21 @@ function baixarBlob(blob: Blob, nomeArquivo: string): void {
   URL.revokeObjectURL(objectUrl)
 }
 
-/** baixa o arquivo do atalho (PDF e MP4 nao sao aceitos na area de transferencia) */
-async function baixarArquivo(atalho: AtalhoArquivo): Promise<void> {
-  const resposta = await fetch(atalho.url)
-  if (!resposta.ok) throw new Error(`Falha ao carregar ${atalho.url}`)
-  baixarBlob(await resposta.blob(), atalho.nomeArquivo)
+/** le o `name` do erro sem recorrer a `any` */
+function nomeDoErro(err: unknown): string {
+  if (err instanceof DOMException || err instanceof Error) return err.name
+  return ''
 }
 
 export default function AtalhosAtendimento() {
   const [feedback, setFeedback] = useState<Feedback | null>(null)
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  /**
+   * Cache do blob por url. A Web Share exige ativacao do usuario (o toque);
+   * se o fetch demorar, a ativacao expira e o navegador recusa com
+   * NotAllowedError. Com o blob ja em cache, o segundo toque compartilha na hora.
+   */
+  const blobsRef = useRef<Map<string, Blob>>(new Map())
 
   useEffect(() => {
     return () => {
@@ -48,6 +58,11 @@ export default function AtalhosAtendimento() {
     setFeedback({ id, msg })
     if (timerRef.current !== null) clearTimeout(timerRef.current)
     timerRef.current = setTimeout(() => setFeedback(null), 2000)
+  }, [])
+
+  const limparFeedback = useCallback(() => {
+    if (timerRef.current !== null) clearTimeout(timerRef.current)
+    setFeedback(null)
   }, [])
 
   const copiar = useCallback(
@@ -62,16 +77,53 @@ export default function AtalhosAtendimento() {
     [anunciar],
   )
 
-  const baixar = useCallback(
+  const obterBlob = useCallback(async (atalho: AtalhoArquivo): Promise<Blob> => {
+    const emCache = blobsRef.current.get(atalho.url)
+    if (emCache) return emCache
+
+    const resposta = await fetch(atalho.url)
+    if (!resposta.ok) throw new Error(`Falha ao carregar ${atalho.url}`)
+    const blob = await resposta.blob()
+    blobsRef.current.set(atalho.url, blob)
+    return blob
+  }, [])
+
+  const compartilhar = useCallback(
     async (atalho: AtalhoArquivo) => {
       try {
-        await baixarArquivo(atalho)
+        const blob = await obterBlob(atalho)
+        const arquivo = new File([blob], atalho.nomeArquivo, { type: atalho.mime })
+        const nav = navigator as NavigatorComCanShare
+
+        if (nav.canShare?.({ files: [arquivo] })) {
+          /**
+           * Vai SOMENTE `files`: alguns apps (WhatsApp incluso) descartam o
+           * anexo quando o compartilhamento traz `title`/`text` junto.
+           */
+          await navigator.share({ files: [arquivo] })
+          anunciar(atalho.id, 'Compartilhado!')
+          return
+        }
+
+        // Sem folha de compartilhamento (desktop): o download e a alternativa.
+        baixarBlob(blob, atalho.nomeArquivo)
         anunciar(atalho.id, 'Baixado!')
-      } catch {
+      } catch (err: unknown) {
+        const nome = nomeDoErro(err)
+        // usuario fechou a folha de compartilhamento: nao e erro
+        if (nome === 'AbortError') {
+          limparFeedback()
+          return
+        }
+        // ativacao do usuario expirou durante o fetch; o blob ja esta em cache
+        if (nome === 'NotAllowedError') {
+          anunciar(atalho.id, 'Toque de novo')
+          return
+        }
         anunciar(atalho.id, 'Erro')
       }
     },
-    [anunciar],
+    [anunciar, limparFeedback, obterBlob],
   )
 
   return (
@@ -102,7 +154,7 @@ export default function AtalhosAtendimento() {
         className="flex flex-col gap-2 border-t border-edge pt-3"
       >
         <h2 id="atalhos-downloads-titulo" className="label-mono">
-          Downloads
+          Compartilhar arquivos
         </h2>
         <div className="flex flex-wrap items-center gap-2 sm:gap-3">
           {ATALHOS_DOWNLOAD.map((atalho) => {
@@ -111,7 +163,7 @@ export default function AtalhosAtendimento() {
               <button
                 key={atalho.id}
                 type="button"
-                onClick={() => void baixar(atalho)}
+                onClick={() => void compartilhar(atalho)}
                 className={CLASSES_BOTAO}
               >
                 {emFeedback ? feedback.msg : atalho.label}

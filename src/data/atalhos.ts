@@ -2,8 +2,9 @@
  * Conteudos que a equipe usa com frequencia na conversa com o lead.
  *
  * Estao em dois grupos porque o navegador so aceita texto e imagem na area
- * de transferencia: PDF e video sao recusados (NotAllowedError), entao esses
- * viram download em vez de copia.
+ * de transferencia. PDF e video sao recusados, entao esses vao pela folha de
+ * compartilhamento do sistema (Web Share) e caem no download onde ela nao
+ * existe.
  */
 
 export interface AtalhoTexto {
@@ -18,8 +19,10 @@ export interface AtalhoArquivo {
   label: string
   /** caminho servido a partir de public/ */
   url: string
-  /** nome sugerido no download */
+  /** nome do arquivo ao compartilhar ou baixar */
   nomeArquivo: string
+  /** o Android usa o mime para decidir quais apps aparecem no compartilhamento */
+  mime: string
 }
 
 export const ATALHOS_COPIAR: AtalhoTexto[] = [
@@ -53,11 +56,13 @@ export const ATALHOS_DOWNLOAD: AtalhoArquivo[] = [
     label: 'PDF apresentação',
     url: '/assets/dvs-apresentacao.pdf',
     nomeArquivo: 'DVS Experience - Apresentacao.pdf',
+    mime: 'application/pdf',
   },
   {
     id: 'video-apresentacao',
     label: 'Vídeo apresentação',
     url: '/assets/dvs-apresentacao.mp4',
     nomeArquivo: 'DVS Experience - Apresentacao.mp4',
+    mime: 'video/mp4',
   },
 ]
