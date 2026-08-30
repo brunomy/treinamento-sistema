@@ -91,6 +91,36 @@ const kommoGuides: Guide[] = [
       },
     ],
   },
+  {
+    id: 'filtrar-lead-por-data',
+    appId: 'kommo',
+    title: 'Filtrar lead por data',
+    description: 'Use o filtro de período para ver apenas os leads criados hoje.',
+    steps: [
+      {
+        image: '/prints/kommo/k04-lista-filtrada.png',
+        title: 'Abrir o filtro',
+        hint: 'Na barra superior, clique em “Pesquisar e filtrar”.',
+        targets: [
+          { id: 'pesquisar-filtrar-data', x: 27.22, y: 2.71, w: 14.84, h: 4.83, label: 'Pesquisar e filtrar' },
+        ],
+      },
+      {
+        image: '/prints/kommo/k05-filtro-data.png',
+        title: 'Abrir o seletor de período',
+        hint: 'Em PROPRIEDADES DE LEAD, clique no campo “A qualquer hora”.',
+        targets: [
+          { id: 'campo-periodo', x: 50.08, y: 23.18, w: 25.87, h: 4.62, label: 'A qualquer hora' },
+        ],
+      },
+      {
+        image: '/prints/kommo/k06-data-hoje.png',
+        title: 'Escolher o período',
+        hint: 'Na lista que abriu, selecione “Hoje”.',
+        targets: [{ id: 'opcao-hoje', x: 50.08, y: 42.44, w: 25.87, h: 3.8, label: 'Hoje' }],
+      },
+    ],
+  },
 ]
 
 export const apps: TrainingApp[] = [

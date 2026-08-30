@@ -52,12 +52,9 @@ export default function RootLayout() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={`${label} (abre em nova guia)`}
-                className="inline-flex min-h-11 items-center gap-2 rounded-lg border border-edge px-4 text-sm font-semibold text-snow transition hover:border-teal/60 hover:text-teal active:scale-[0.97] active:border-teal/60 active:text-teal focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal"
+                className="inline-flex min-h-11 items-center rounded-lg border border-edge px-4 text-sm font-semibold text-snow transition hover:border-teal/60 hover:text-teal active:scale-[0.97] active:border-teal/60 active:text-teal focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal"
               >
                 {label}
-                <span aria-hidden="true" className="text-teal">
-                  ↗
-                </span>
               </a>
             ))}
           </div>
