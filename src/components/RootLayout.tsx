@@ -12,7 +12,7 @@ const ATALHOS_KOMMO = [
     href: 'https://drdouglasvinicius.kommo.com/leads/pipeline/?filter%5Bstatus_id%5D%5B%5D=110762912&filter%5Bstatus_id%5D%5B%5D=110974800&filter%5Bstatus_id%5D%5B%5D=110974804&filter%5Bstatus_id%5D%5B%5D=110974808&filter%5Bstatus_id%5D%5B%5D=62946007&filter%5Bstatus_id%5D%5B%5D=62946015&filter%5Bstatus_id%5D%5B%5D=62946019&filter%5Bstatus_id%5D%5B%5D=64335207&filter%5Bstatus_id%5D%5B%5D=66515279&filter%5Bstatus_id%5D%5B%5D=66728595&filter%5Bstatus_id%5D%5B%5D=68262967&filter%5Bdate_preset%5D=yesterday&useFilter=y',
   },
   {
-    label: 'Meus leads',
+    label: 'Todos',
     href: 'https://drdouglasvinicius.kommo.com/leads/pipeline/?filter%5Bstatus_id%5D%5B%5D=110762912&filter%5Bstatus_id%5D%5B%5D=110974800&filter%5Bstatus_id%5D%5B%5D=110974804&filter%5Bstatus_id%5D%5B%5D=110974808&filter%5Bstatus_id%5D%5B%5D=62946007&filter%5Bstatus_id%5D%5B%5D=62946015&filter%5Bstatus_id%5D%5B%5D=62946019&filter%5Bstatus_id%5D%5B%5D=64335207&filter%5Bstatus_id%5D%5B%5D=66515279&filter%5Bstatus_id%5D%5B%5D=66728595&filter%5Bstatus_id%5D%5B%5D=68262967&filter%5Btags_logic%5D=or&tag%5B%5D=199213&useFilter=y',
   },
 ] as const
@@ -68,21 +68,29 @@ export default function RootLayout() {
       {!emTreino && (
         <div className="border-b border-edge">
           <div className="mx-auto flex w-full max-w-6xl flex-col gap-3 px-4 py-2 sm:px-6">
-            <div className="flex flex-wrap items-center gap-2 sm:gap-3">
-              {ATALHOS_KOMMO.map(({ label, href }) => (
-                <a
-                  key={label}
-                  href={`/ir?u=${encodeURIComponent(href)}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={`${label} (abre em nova guia)`}
-                  onClick={abrirEmNovaJanela}
-                  className="inline-flex min-h-11 items-center rounded-lg border border-edge px-4 text-sm font-semibold text-snow transition hover:border-teal/60 hover:text-teal active:scale-[0.97] active:border-teal/60 active:text-teal focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal"
-                >
-                  {label}
-                </a>
-              ))}
-            </div>
+            <section
+              aria-labelledby="atalhos-meus-leads-titulo"
+              className="flex flex-col gap-2"
+            >
+              <h2 id="atalhos-meus-leads-titulo" className="label-mono">
+                Meus leads
+              </h2>
+              <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+                {ATALHOS_KOMMO.map(({ label, href }) => (
+                  <a
+                    key={label}
+                    href={`/ir?u=${encodeURIComponent(href)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`${label} (abre em nova guia)`}
+                    onClick={abrirEmNovaJanela}
+                    className="inline-flex min-h-11 min-w-[7.5rem] items-center justify-center rounded-lg border border-edge px-4 text-sm font-semibold text-snow transition hover:border-teal/60 hover:text-teal active:scale-[0.97] active:border-teal/60 active:text-teal focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal"
+                  >
+                    {label}
+                  </a>
+                ))}
+              </div>
+            </section>
 
             <div className="border-t border-edge pt-3">
               <AtalhosAtendimento />
