@@ -49,6 +49,11 @@ export const ATALHOS_COPIAR: AtalhoTexto[] = [
     texto:
       'O valor da consulta é R$850,00 reais \nSe você pagar no momento do agendamento é R$500,00 reais\nE se quiser deixar pro dia da consulta fica R$850,00 com um sinal de R$150,00 reais.',
   },
+  {
+    id: 'chave-pix',
+    label: 'Chave PIX',
+    texto: 'Chave PIX:\n45.290.824/0001-81',
+  },
 ]
 
 export const ATALHOS_DOWNLOAD: AtalhoArquivo[] = [
